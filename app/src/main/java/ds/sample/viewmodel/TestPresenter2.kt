@@ -27,5 +27,14 @@ class TestPresenter2(val name: String, val text: String) : Presenter() {
         L.v("test2 destroyed")
     }
 
+    fun onBtnClick() {
+        val main = MainPresenter()
+        run(main)
+    }
+
+    fun setParams(name: String, text: String) {
+        label1.set(name)
+        label2.set(text)
+    }
 
 }

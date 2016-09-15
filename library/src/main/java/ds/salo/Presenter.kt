@@ -6,7 +6,12 @@ import android.view.Menu
 import android.view.MenuItem
 
 abstract class Presenter() {
+    companion object {
+        var idGenerator: Long = 1
+            get() = field++
+    }
 
+    var id = idGenerator
     val navigator by lazy { Navigator(this) }
     var bindingAware: BindingAware? = null
     var dead = false
@@ -14,14 +19,18 @@ abstract class Presenter() {
 
     //val lifeCycleSignal: BehaviorSubject
 
+    /** Convenient helper to navigate between presenters
+     * @return true if success
+     */
     fun run(p: Presenter, bundle: Bundle? = null): Boolean {
-        val config = Salo.getConfig(p)
-        // check if already exist
-        if (Salo.isExist(config.key)) {
-            println("can't start this view. presenter already running")
+        val config = Salo.getConfig(p.javaClass)
+
+        if (p.isAttached()) {
+            println("presenter ${p.javaClass.simpleName} already running. skip any actions")
             return false
+        } else if (!Salo.isAwaiting(p)) {
+            Salo.putDelayed(config, p)
         }
-        Salo.put(config, p)
         navigator.goto(config.bindingAware, bundle)
         return true
     }

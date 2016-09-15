@@ -42,6 +42,11 @@ abstract class BindingActivity : AppCompatActivity(), BindingAware {
         delegate.onDestroy(this)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        delegate.onSaveInstanceState(outState)
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         return delegate.onPrepareOptionsMenu(menu)
     }

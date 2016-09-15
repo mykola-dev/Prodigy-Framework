@@ -36,7 +36,6 @@ class App : Application() {
         }
     }
 
-
 }
 
 val saloInitializer: Salo.() -> Unit = {

@@ -2,10 +2,12 @@ package ds.salo
 
 import android.support.annotation.LayoutRes
 
+// framework helper. shouldn't use it directly in most cases
 object Salo {
-    val configs = mutableListOf<Configuration>()
 
+    val configs = mutableListOf<Configuration>()
     val presentersCache = mutableMapOf<String, Presenter>()
+    val unbindedQueue = mutableMapOf<Configuration, Presenter>()
 
     fun init(block: Salo.() -> Unit) {
         block(this)
@@ -16,50 +18,67 @@ object Salo {
     }
 
     // when BindingAware exists. do not use it directly!
-    internal fun provide(ba: BindingAware): Presenter {
-        println("get presenter for BindingAware (${ba.javaClass.simpleName})")
-        val config = getConfig(ba)
-        return provide(config)
-    }
+    internal fun provide(bindingAware: BindingAware, presenterId: Long = 0): Presenter {
+        val config = getConfig(bindingAware)
+        println("provide presenter ${config.presenter.javaClass.simpleName}")
+        var p: Presenter?
 
-    private fun provide(config: Configuration): Presenter {
-        val key = config.key
-        var p = presentersCache[key]
-        if (p == null) {
-            p = config.presenter.newInstance()
-            println("create new ${p?.javaClass?.simpleName}")
-            put(config, p)
+        if (presenterId != 0L) {
+            val key = key(config, presenterId)
+            p = presentersCache[key]
+            println("got from cache $key")
         } else {
-            println("got from cache")
+            p = unbindedQueue[config]
+            if (p != null) {
+                println("found unbinded presenter!")
+                unbindedQueue.remove(config)
+            } else {
+                p = config.presenter.newInstance()
+                println("create new ${p?.javaClass?.simpleName} with default constructor")
+            }
+            put(config, p!!)
         }
 
         return p!!
     }
 
+    @Deprecated("use constructors directly instead!")
+    private fun <P : Presenter> provide(pCls: Class<out P>): P {
+        println("get presenter ${pCls.simpleName}")
+        val config = getConfig(pCls)
+        val p = config.presenter.newInstance()
+        putDelayed(config, p)
+        return p as P
+    }
+
+    fun key(config: Configuration, id: Long) = "${config.bindingAware.simpleName}_${config.presenter.simpleName}_$id"
+
     fun put(config: Configuration, presenter: Presenter) {
-        val pCls = presenter.javaClass
-        val key = config.key
+        val key = key(config, presenter.id)
         println("put presenter to $key")
         presentersCache.put(key, presenter)
     }
 
-    fun isExist(key: String): Boolean {
-        return key in presentersCache
+    fun putDelayed(config: Configuration, presenter: Presenter) {
+        println("put presenter to the queue")
+        unbindedQueue.put(config, presenter)
     }
 
-    fun remove(config: Configuration) {
-        val key = config.key
-        println("remove key $key from cache")
-        presentersCache.remove(key)
+    fun isAwaiting(p: Presenter): Boolean {
+        val config = getConfig(p.javaClass)
+        return config in unbindedQueue
     }
 
     fun remove(p: Presenter) {
-        val config = getConfig(p)
-        remove(config)
+        val config = getConfig(p.javaClass)
+        val key = key(config, p.id)
+        presentersCache.remove(key)
+        println("presenter $key has been removed from cache")
     }
 
     internal fun getConfig(ba: BindingAware): Configuration = configs.first { it.bindingAware == ba.javaClass }
 
-    internal fun getConfig(p: Presenter): Configuration = configs.first { it.presenter == p.javaClass }
+    internal fun getConfig(pCls: Class<out Presenter>): Configuration = configs.first { it.presenter == pCls }
+
 
 }

@@ -15,7 +15,9 @@ class BinderDelegate {
 
     fun onCreate(ba: BindingAware, savedState: Bundle?) {
         println("delegated onCreate")
-        presenter = Salo.provide(ba)
+
+        val id = savedState?.getLong(ID) ?: 0
+        presenter = Salo.provide(ba, id)
 
         if (binding == null) {
             val config = Salo.getConfig(ba)
@@ -57,6 +59,11 @@ class BinderDelegate {
 
     }
 
+
+    fun onSaveInstanceState(state: Bundle) {
+        state.putLong(ID, presenter.id)
+    }
+
     fun onStart(ba: BindingAware) {
         println("delegated onStart")
         presenter.onStart()
@@ -85,5 +92,9 @@ class BinderDelegate {
     fun onOptionsItemSelected(item: MenuItem): Boolean {
         println("delegated onOptionsItemSelected")
         return presenter.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        private val ID = "KEY_ID"
     }
 }
