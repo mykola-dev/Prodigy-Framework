@@ -1,4 +1,4 @@
-package ds.sample.ui;
+package ds.sample.view;
 
 public interface Progressable {
 

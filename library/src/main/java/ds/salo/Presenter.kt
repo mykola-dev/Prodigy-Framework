@@ -1,15 +1,11 @@
 package ds.salo
 
 import android.app.Activity
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 
 abstract class Presenter() {
-    companion object {
-        var idGenerator: Long = 1
-            get() = field++
-    }
 
     var id = idGenerator
     val navigator by lazy { Navigator(this) }
@@ -17,23 +13,21 @@ abstract class Presenter() {
     var dead = false
     var justCreated = true
 
-    //val lifeCycleSignal: BehaviorSubject
+    val results = mutableListOf<Result<Any>>()
 
-    /** Convenient helper to navigate between presenters
-     * @return true if success
-     */
-    fun run(p: Presenter, bundle: Bundle? = null): Boolean {
-        val config = Salo.getConfig(p.javaClass)
-
-        if (p.isAttached()) {
-            println("presenter ${p.javaClass.simpleName} already running. skip any actions")
-            return false
-        } else if (!Salo.isAwaiting(p)) {
-            Salo.putDelayed(config, p)
-        }
-        navigator.goto(config.bindingAware, bundle)
-        return true
+    inline fun <reified T : Any> Presenter.setCallback(noinline cb: (T?) -> Unit) {
+        val cls: Class<T> = T::class.java
+        val result: Result<T> = Result(cls, cb)
+        result.owner = this
+        results.add(result as Result<Any>)
     }
+
+    protected inline fun <reified T : Any> setResult(result: T?) {
+        val r: Result<in T> = results.first { T::class.java == it.cls }
+        r.result = result
+    }
+
+    //val lifeCycleSignal: BehaviorSubject
 
     fun isAttached() = bindingAware != null
 
@@ -63,9 +57,33 @@ abstract class Presenter() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // finish activity, back to fragment stack, close dialog etc.
+    fun finish() {
+        bindingAware?.delegate?.finish(bindingAware!!)
+    }
+
+    fun fireCallbacks() {
+        results.forEach {
+            //if (it.owner?.isAttached() ?: false) {
+                it.callback.invoke(it.result)
+                it.owner = null
+            //}
+        }
+        results.clear()
+    }
+
     internal fun getActivity(): Activity? {
         return bindingAware?.activity
     }
 
+    fun toast(text: String?) {
+        Toast.makeText(bindingAware?.getContext(), text, Toast.LENGTH_SHORT).show()
+    }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    companion object {
+        var idGenerator: Long = 1
+            get() = field++
+    }
 }

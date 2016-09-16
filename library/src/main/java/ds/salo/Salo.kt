@@ -20,7 +20,7 @@ object Salo {
     // when BindingAware exists. do not use it directly!
     internal fun provide(bindingAware: BindingAware, presenterId: Long = 0): Presenter {
         val config = getConfig(bindingAware)
-        println("provide presenter ${config.presenter.javaClass.simpleName}")
+        println("provide presenter ${config.presenter.simpleName}")
         var p: Presenter?
 
         if (presenterId != 0L) {
@@ -40,15 +40,6 @@ object Salo {
         }
 
         return p!!
-    }
-
-    @Deprecated("use constructors directly instead!")
-    private fun <P : Presenter> provide(pCls: Class<out P>): P {
-        println("get presenter ${pCls.simpleName}")
-        val config = getConfig(pCls)
-        val p = config.presenter.newInstance()
-        putDelayed(config, p)
-        return p as P
     }
 
     fun key(config: Configuration, id: Long) = "${config.bindingAware.simpleName}_${config.presenter.simpleName}_$id"

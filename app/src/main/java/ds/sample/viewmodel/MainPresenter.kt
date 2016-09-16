@@ -1,13 +1,14 @@
 package ds.sample.viewmodel
 
+import android.content.DialogInterface
 import android.databinding.ObservableField
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import ds.salo.Presenter
 import ds.sample.R
-import ds.sample.activity.TestActivity
 import ds.sample.util.L
+import ds.sample.view.TestActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,7 +45,29 @@ class MainPresenter : Presenter() {
     fun onScreen2ButtonClick() {
         L.v("clicked!")
         val test2: TestPresenter2 = TestPresenter2("Marty McFly", textField.get())
-        run(test2)
+        navigator.run(test2)
+    }
+
+    fun onScreen3ButtonClick() {
+        L.v("clicked!")
+        val p = CallbackPresenter()
+        p.setCallback<String> {
+            L.v("callback!")
+            toast(it)
+        }
+        navigator.run(p)
+    }
+
+    fun onInputButtonClick() {
+        val p = DialogPresenter()
+        p.setCallback<Int> {
+            L.v("callbacked!")
+            when (it) {
+                DialogInterface.BUTTON_POSITIVE -> toast("ok pressed")
+                DialogInterface.BUTTON_NEGATIVE -> toast("cancel pressed")
+            }
+        }
+        navigator.run(p)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {

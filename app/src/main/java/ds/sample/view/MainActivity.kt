@@ -1,4 +1,4 @@
-package ds.sample.activity
+package ds.sample.view
 
 import android.view.Menu
 import ds.salo.BindingActivity

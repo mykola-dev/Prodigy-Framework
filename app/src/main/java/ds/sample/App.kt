@@ -4,12 +4,8 @@ import android.app.Application
 import android.support.v7.app.AppCompatDelegate
 import com.facebook.stetho.Stetho
 import ds.salo.Salo
-import ds.sample.activity.MainActivity
-import ds.sample.activity.TestActivity
-import ds.sample.activity.TestActivity2
-import ds.sample.viewmodel.MainPresenter
-import ds.sample.viewmodel.TestPresenter
-import ds.sample.viewmodel.TestPresenter2
+import ds.sample.view.*
+import ds.sample.viewmodel.*
 import timber.log.Timber
 
 class App : Application() {
@@ -42,5 +38,7 @@ val saloInitializer: Salo.() -> Unit = {
     bind<MainActivity, MainPresenter>(R.layout.activity_main)
     bind<TestActivity, TestPresenter>(R.layout.activity_test)
     bind<TestActivity2, TestPresenter2>(R.layout.activity_test2)
+    bind<CallbackActivity, CallbackPresenter>(R.layout.activity_with_callback)
+    bind<InputDialogFragment, DialogPresenter>(R.layout.dialog_input)
 }
 

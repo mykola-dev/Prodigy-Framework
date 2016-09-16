@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     >
 
-    <data class="MainBinding">
+    <data>
 
         <variable
             name="presenter"
@@ -20,7 +20,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context=".activity.MainActivity"
+        tools:context=".view.MainActivity"
         >
 
         <TextView
@@ -49,10 +49,19 @@
             />
 
         <Button
+            android:id="@+id/screen3_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{v->presenter.onScreen3ButtonClick()}"
+            android:text="Screen 3"
+            />
+
+        <Button
             android:id="@+id/dialog_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Input data"
+            android:onClick="@{v->presenter.onInputButtonClick()}"
             />
     </LinearLayout>
 </layout>

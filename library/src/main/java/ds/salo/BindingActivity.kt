@@ -43,8 +43,8 @@ abstract class BindingActivity : AppCompatActivity(), BindingAware {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         delegate.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
