@@ -11,6 +11,7 @@ class TestPresenter : Presenter() {
 
     override fun onAttach() {
         L.v("test attached")
+        // lifecycle test
     }
 
     override fun onDetach() {

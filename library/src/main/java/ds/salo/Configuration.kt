@@ -1,3 +1,3 @@
 package ds.salo
 
-data class Configuration(val bindingAware: Class<out BindingAware>, val presenter: Class<out Presenter>, val layout: Int, val bindingVariable: Int)
+data class Configuration(val component: Class<out IComponent>, val presenter: Class<out Presenter>, val layout: Int, val bindingVariable: Int)

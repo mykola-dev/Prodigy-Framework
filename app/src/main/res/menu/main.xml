@@ -20,5 +20,11 @@
         app:showAsAction="never"
         />
 
+    <item
+        android:id="@+id/menu_memory_diagnostic"
+        android:title="Memory Diagnostic"
+        app:showAsAction="never"
+        />
+
 
 </menu>

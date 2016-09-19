@@ -34,11 +34,16 @@ class App : Application() {
 
 }
 
+// todo do it with APT
 val saloInitializer: Salo.() -> Unit = {
     bind<MainActivity, MainPresenter>(R.layout.activity_main)
     bind<TestActivity, TestPresenter>(R.layout.activity_test)
     bind<TestActivity2, TestPresenter2>(R.layout.activity_test2)
     bind<CallbackActivity, CallbackPresenter>(R.layout.activity_with_callback)
+    bind<ViewPagerActivity, ViewPagerPresenter>(R.layout.activity_viewpager)
+
     bind<InputDialogFragment, DialogPresenter>(R.layout.dialog_input)
+    bind<ListFragment, ListPresenter>(R.layout.fragment_list)
+    bind<SimpleFragment, SimpleFragmentPresenter>(R.layout.fragment_simple)
 }
 

@@ -1,6 +1,5 @@
 package ds.salo
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -11,13 +10,12 @@ import android.support.v7.app.AlertDialog
 import android.view.Menu
 import android.view.MenuItem
 
-abstract class BindingDialogFragment : DialogFragment(), BindingAware, DialogInterface.OnClickListener {
+abstract class BindingDialogFragment : DialogFragment(), IComponent, DialogInterface.OnClickListener {
 
     data class ButtonData(val title: String, val action: Int)
 
     override val delegate: BinderDelegate = BinderDelegate()
     override val binding: ViewDataBinding by lazy { delegate.binding!! }
-    override val activity: Activity by lazy { getActivity() }
 
     override fun invalidateOptionsMenu() {
         activity.invalidateOptionsMenu()
@@ -56,7 +54,7 @@ abstract class BindingDialogFragment : DialogFragment(), BindingAware, DialogInt
     }
 
     override fun getContext(): Context {
-        return getActivity()
+        return activity.applicationContext
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -87,7 +85,7 @@ abstract class BindingDialogFragment : DialogFragment(), BindingAware, DialogInt
         delegate.onDialogClick(dialog, which)
     }
 
-    protected fun getDialogBuilder(): AlertDialog.Builder = AlertDialog.Builder(getActivity()).setView(binding.root)
+    protected fun getDialogBuilder(): AlertDialog.Builder = AlertDialog.Builder(activity).setView(binding.root)
 
     abstract protected fun getDialogButtons(): List<ButtonData>
 }

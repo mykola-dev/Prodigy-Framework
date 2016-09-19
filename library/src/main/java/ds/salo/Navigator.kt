@@ -40,12 +40,31 @@ class Navigator(val presenter: Presenter) {
             throw IllegalStateException("activity is null")
     }
 
-    fun goto(cls: Class<out BindingAware>, bundle: Bundle? = null) {
+    private fun commitFragment(cls: Class<out BindingFragment>, bundle: Bundle?) {
+        println("commitFragment ${cls.name}")
+        val a = presenter.getActivity()
+        if (a != null) {
+            val fragment = Fragment.instantiate(a, cls.name, bundle) as BindingFragment
+            if (a is FragmentActivity) {
+                a.supportFragmentManager
+                    .beginTransaction()
+                    .replace(fragment.getTargetLayout(), fragment, "fragment")
+                    .commitNow()
+            } else {
+                throw IllegalStateException("fragment can start only on FragmentActivity")
+            }
+        } else
+            throw IllegalStateException("activity is null")
+    }
+
+    fun goto(cls: Class<out IComponent>, bundle: Bundle? = null) {
         println("goto ${cls.name} ${if (bundle != null) "with bundle" else ""}")
         if (Activity::class.java.isAssignableFrom(cls)) {
             startActivity(cls as Class<out BindingActivity>, bundle)
         } else if (BindingDialogFragment::class.java.isAssignableFrom(cls)) {
             startDialog(cls as Class<out BindingDialogFragment>, bundle)
+        } else if (BindingFragment::class.java.isAssignableFrom(cls)) {
+            commitFragment(cls as Class<out BindingFragment>, bundle)
         } else {
             throw IllegalStateException("${cls.name} doesnt support yet")
             // todo fragments/views
@@ -65,7 +84,7 @@ class Navigator(val presenter: Presenter) {
         } else if (!Salo.isAwaiting(p)) {
             Salo.putDelayed(config, p)
         }
-        goto(config.bindingAware, bundle)
+        goto(config.component, bundle)
         return true
     }
 
@@ -73,19 +92,19 @@ class Navigator(val presenter: Presenter) {
     /**
      * T is callback param type
      */
-    fun <T : Any> runForResult(p: Presenter, bundle: Bundle? = null, callback: ((T) -> Unit)?): Boolean {
-        val config = Salo.getConfig(p.javaClass)
+    /* fun <T : Any> runForResult(p: Presenter, bundle: Bundle? = null, callback: ((T) -> Unit)?): Boolean {
+         val config = Salo.getConfig(p.javaClass)
 
-        if (p.isAttached()) {
-            println("presenter ${p.javaClass.simpleName} already running. skip any actions")
-            return false
-        } else if (!Salo.isAwaiting(p)) {
-            Salo.putDelayed(config, p)
-        }
-        /*if (callback != null)
-            p.setCallback(callback)*/
+         if (p.isAttached()) {
+             println("presenter ${p.javaClass.simpleName} already running. skip any actions")
+             return false
+         } else if (!Salo.isAwaiting(p)) {
+             Salo.putDelayed(config, p)
+         }
+         *//*if (callback != null)
+            p.setCallback(callback)*//*
         goto(config.bindingAware, bundle)
         return true
-    }
+    }*/
 
 }

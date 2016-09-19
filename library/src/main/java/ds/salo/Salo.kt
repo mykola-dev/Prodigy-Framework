@@ -6,25 +6,25 @@ import android.support.annotation.LayoutRes
 object Salo {
 
     val configs = mutableListOf<Configuration>()
-    val presentersCache = mutableMapOf<String, Presenter>()
-    val unbindedQueue = mutableMapOf<Configuration, Presenter>()
+    internal val presentersCache = mutableMapOf<String, Presenter>()
+    internal val unbindedQueue = mutableMapOf<Configuration, Presenter>()
 
     fun init(block: Salo.() -> Unit) {
         block(this)
     }
 
-    inline fun <reified BA : BindingAware, reified P : Presenter> bind(@LayoutRes layout: Int, bindingVariable: Int = BR.presenter) {
-        configs.add(Configuration(BA::class.java, P::class.java, layout, bindingVariable))
+    inline fun <reified C : IComponent, reified P : Presenter> bind(@LayoutRes layout: Int, bindingVariable: Int = BR.presenter) {
+        configs.add(Configuration(C::class.java, P::class.java, layout, bindingVariable))
     }
 
     // when BindingAware exists. do not use it directly!
-    internal fun provide(bindingAware: BindingAware, presenterId: Long = 0): Presenter {
-        val config = getConfig(bindingAware)
+    internal fun provide(component: IComponent, presenterId: Long = 0): Presenter {
+        val config = getConfig(component)
         println("provide presenter ${config.presenter.simpleName}")
         var p: Presenter?
 
-        if (presenterId != 0L) {
-            val key = key(config, presenterId)
+        val key = key(config, presenterId)
+        if (presenterId != 0L && presentersCache.containsKey(key)) {
             p = presentersCache[key]
             println("got from cache $key")
         } else {
@@ -42,7 +42,7 @@ object Salo {
         return p!!
     }
 
-    fun key(config: Configuration, id: Long) = "${config.bindingAware.simpleName}_${config.presenter.simpleName}_$id"
+    fun key(config: Configuration, id: Long) = "${config.component.simpleName}_${config.presenter.simpleName}_$id"
 
     fun put(config: Configuration, presenter: Presenter) {
         val key = key(config, presenter.id)
@@ -67,9 +67,17 @@ object Salo {
         println("presenter $key has been removed from cache")
     }
 
-    internal fun getConfig(ba: BindingAware): Configuration = configs.first { it.bindingAware == ba.javaClass }
+    internal fun getConfig(component: IComponent): Configuration = configs.first { it.component == component.javaClass }
 
     internal fun getConfig(pCls: Class<out Presenter>): Configuration = configs.first { it.presenter == pCls }
+
+    fun getDiagnostics(): String {
+        var result = "cache size=${presentersCache.size}\n"
+        result += presentersCache.keys.joinToString()
+        result += "\nunbinded size=${unbindedQueue.size}"
+        result += unbindedQueue.keys.joinToString()
+        return result
+    }
 
 
 }

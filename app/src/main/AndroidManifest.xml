@@ -3,9 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:name="ds.sample.App"
         android:allowBackup="true"
@@ -22,11 +19,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="ds.sample.activity.TestActivity" />
-
-        <activity android:name="ds.sample.activity.TestActivity2" />
-
-        <activity android:name="ds.sample.activity.CallbackActivity" />
+        <activity android:name="ds.sample.view.TestActivity" />
+        <activity android:name="ds.sample.view.TestActivity2" />
+        <activity android:name="ds.sample.view.CallbackActivity" />
+        <activity android:name="ds.sample.view.ViewPagerActivity" />
 
     </application>
 

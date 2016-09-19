@@ -9,7 +9,7 @@ abstract class Presenter() {
 
     var id = idGenerator
     val navigator by lazy { Navigator(this) }
-    var bindingAware: BindingAware? = null
+    var component: IComponent? = null
     var dead = false
     var justCreated = true
 
@@ -29,7 +29,7 @@ abstract class Presenter() {
 
     //val lifeCycleSignal: BehaviorSubject
 
-    fun isAttached() = bindingAware != null
+    fun isAttached() = component != null
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // lifecycle and callbacks
@@ -59,7 +59,7 @@ abstract class Presenter() {
 
     // finish activity, back to fragment stack, close dialog etc.
     fun finish() {
-        bindingAware?.delegate?.finish(bindingAware!!)
+        component?.delegate?.finish(component!!)
     }
 
     fun fireCallbacks() {
@@ -73,11 +73,11 @@ abstract class Presenter() {
     }
 
     internal fun getActivity(): Activity? {
-        return bindingAware?.activity
+        return component?.getActivity()
     }
 
     fun toast(text: String?) {
-        Toast.makeText(bindingAware?.getContext(), text, Toast.LENGTH_SHORT).show()
+        Toast.makeText(component?.getContext(), text, Toast.LENGTH_SHORT).show()
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

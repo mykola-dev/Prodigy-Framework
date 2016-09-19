@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{presenter::onScreen1ButtonClick}"
-            android:text="Screen 1"
+            android:text="respect lifecycle test activity"
             />
 
         <Button
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{v->presenter.onScreen2ButtonClick()}"
-            android:text="Screen 2"
+            android:text="run via presenter constructor"
             />
 
         <Button
@@ -53,15 +53,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{v->presenter.onScreen3ButtonClick()}"
-            android:text="Screen 3"
+            android:text="run for result activity"
             />
 
         <Button
             android:id="@+id/dialog_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Input data"
+            android:text="Input data and listen result"
             android:onClick="@{v->presenter.onInputButtonClick()}"
+            />
+
+        <Button
+            android:id="@+id/viewpager_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="viewpager activity with fragments"
+            android:onClick="@{v->presenter.onViewPagerDemo()}"
             />
     </LinearLayout>
 </layout>

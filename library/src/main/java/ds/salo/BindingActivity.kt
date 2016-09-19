@@ -1,16 +1,16 @@
 package ds.salo
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 
-abstract class BindingActivity : AppCompatActivity(), BindingAware {
+abstract class BindingActivity : AppCompatActivity(), IComponent {
 
     override val delegate = BinderDelegate()
     override val binding by lazy { delegate.binding!! }
-    override val activity by lazy { this }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +56,7 @@ abstract class BindingActivity : AppCompatActivity(), BindingAware {
     }
 
     override fun getContext(): Context = applicationContext
+    override fun getActivity(): Activity = this
 
 
 }

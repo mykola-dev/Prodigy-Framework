@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import ds.salo.Presenter
+import ds.salo.Salo
 import ds.sample.R
 import ds.sample.util.L
 import ds.sample.view.TestActivity
@@ -70,6 +71,11 @@ class MainPresenter : Presenter() {
         navigator.run(p)
     }
 
+    fun onViewPagerDemo() {
+        val p = ViewPagerPresenter()
+        navigator.run(p)
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         // todo get rid of view stuff in the presenter
         menu.findItem(R.id.menu_notifications)
@@ -82,9 +88,11 @@ class MainPresenter : Presenter() {
         when (item.itemId) {
             R.id.menu_notifications -> {
                 notificationsEnabled = !notificationsEnabled
-                bindingAware?.invalidateOptionsMenu()
+                component?.invalidateOptionsMenu()
             }
-        //R.id.menu_settings -> navigator.goto()
+            R.id.menu_memory_diagnostic -> {
+                toast(Salo.getDiagnostics())
+            }
         }
         return true
     }
