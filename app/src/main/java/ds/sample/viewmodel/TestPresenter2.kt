@@ -11,7 +11,6 @@ class TestPresenter2(val name: String, val text: String) : Presenter<IComponent>
     val label2 = ObservableField<String>()
 
     override fun onCreate() {
-
         L.v("test2 created")
         label1.set(name)
         label2.set(text)

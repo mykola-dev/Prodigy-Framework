@@ -43,10 +43,14 @@ class BinderDelegate {
 
             presenter.component = component
             if (presenter.justCreated) {
+                println("${presenter.javaClass.simpleName} onCreate")
                 presenter.onCreate()
+                presenter.lifecycleSignal.onNext(LifecycleEvent.CREATE)
             }
 
+            println("${presenter.javaClass.simpleName} onAttach")
             presenter.onAttach()
+            presenter.lifecycleSignal.onNext(LifecycleEvent.ATTACH)
             presenter.justCreated = false
         }
 
@@ -60,7 +64,9 @@ class BinderDelegate {
         }
 
         if (presenter.isAttached()) {
+            println("${presenter.javaClass.simpleName} onDetach")
             presenter.onDetach()
+            presenter.lifecycleSignal.onNext(LifecycleEvent.DETACH)
             binding?.unbind()
             binding = null
             presenter.component = null
@@ -81,8 +87,10 @@ class BinderDelegate {
 
         if (finishing) {
             presenter.fireCallbacks()
-            Salo.remove(presenter)
+            println("${presenter.javaClass.simpleName} onDestroy")
             presenter.onDestroy()
+            presenter.lifecycleSignal.onNext(LifecycleEvent.DESTROY)
+            Salo.remove(presenter)
             presenter.dead = true
 
         }

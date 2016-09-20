@@ -1,6 +1,5 @@
 package ds.salo
 
 import rx.Observable
+import rx.functions.Func1
 
-
-fun <T> Observable<T>.respectLifeCycle() : Observable<T> = this // todo

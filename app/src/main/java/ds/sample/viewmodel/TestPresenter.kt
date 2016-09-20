@@ -4,6 +4,7 @@ import android.databinding.ObservableField
 import android.view.MenuItem
 import ds.salo.IComponent
 import ds.salo.Presenter
+import ds.salo.respectLifeCycle
 import ds.sample.R
 import ds.sample.util.L
 import ds.sample.util.applySchedulers
@@ -17,23 +18,19 @@ class TestPresenter : Presenter<IComponent>() {
 
     val text = ObservableField<String>("")
 
-    val generator = Observable.just("AWESOME DATA")
-        .delay(1, TimeUnit.SECONDS)
+    val generator = Observable.just("AWESOME DATA", "another data", "latest data")
+        .zipWith(Observable.interval(1, TimeUnit.SECONDS), { d, t -> d })
 
     override fun onCreate() {
         add("[created]")
-        super.onCreate()
-
     }
 
     override fun onAttach() {
-        super.onAttach()
         add("[attached]")
         // lifecycle test
     }
 
     override fun onDetach() {
-        super.onDetach()
         add("[detached]")
     }
 
@@ -41,7 +38,9 @@ class TestPresenter : Presenter<IComponent>() {
         when (item.itemId) {
             R.id.menu_next -> {
                 generator
+                    .doOnNext { L.v(it) }
                     .applySchedulers()
+                    .respectLifeCycle(this)
                     .subscribe {
                         L.v("isAttached=${isAttached()} data=$it")
                         add(it)

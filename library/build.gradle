@@ -37,10 +37,8 @@ dependencies {
     compile "com.android.support:appcompat-v7:$supportVersion"
 
     // reactive stuff
-    compile 'io.reactivex:rxjava:1.1.10'                                // https://github.com/ReactiveX/RxJava
+    compile 'io.reactivex:rxjava:1.2.0'                                // https://github.com/ReactiveX/RxJava
     compile 'io.reactivex:rxandroid:1.2.1'                              // https://github.com/ReactiveX/RxAndroid
-    compile 'com.trello:rxlifecycle:0.7.0'                              // https://github.com/trello/RxLifecycle
-    compile 'com.trello:rxlifecycle-components:0.7.0'
 
     kapt "com.android.databinding:compiler:$gradle_plugin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

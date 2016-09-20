@@ -11,7 +11,6 @@ class ListPresenter : Presenter<IComponent>() {
     val adapter = ObservableField<NamesAdapter>()
 
     override fun onCreate() {
-        super.onCreate()
         adapter.set(NamesAdapter(component!!.getContext(), getData()))
     }
 

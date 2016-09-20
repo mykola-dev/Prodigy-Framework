@@ -22,7 +22,6 @@ class MainPresenter : Presenter<IComponent>() {
     private var notificationsEnabled = true
 
     override fun onCreate() {
-        super.onCreate()
         val date = SimpleDateFormat.getDateTimeInstance().format(Date())
         textField.set(date)
     }

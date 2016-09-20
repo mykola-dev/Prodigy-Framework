@@ -1,10 +1,10 @@
 package ds.salo
 
 import android.app.Activity
-import android.support.annotation.CallSuper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import rx.subjects.BehaviorSubject
 
 abstract class Presenter<C : IComponent> {
 
@@ -13,8 +13,8 @@ abstract class Presenter<C : IComponent> {
     var component: C? = null
     var dead = false
     var justCreated = true
-
     val results = mutableListOf<Result<Any>>()
+    val lifecycleSignal = BehaviorSubject.create<LifecycleEvent>()
 
     inline fun <reified T : Any> Presenter<*>.setCallback(noinline cb: (T?) -> Unit) {
         val cls: Class<T> = T::class.java
@@ -35,28 +35,16 @@ abstract class Presenter<C : IComponent> {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // lifecycle and callbacks
 
-    @CallSuper
-    open fun onCreate() {
-        println("${javaClass.simpleName} onCreate")
-    }
+    open fun onCreate() = Unit
 
     /** BindingAware has been attached to presenter */
-    @CallSuper
-    open fun onAttach() {
-        println("${javaClass.simpleName} onAttach")
-    }
+    open fun onAttach() = Unit
 
     /** BindingAware has been detached from presenter */
-    @CallSuper
-    open fun onDetach() {
-        println("${javaClass.simpleName} onDetach")
-    }
+    open fun onDetach() = Unit
 
     /** Presenter has been destroyed and shouldn't be used. dead flag is true from now */
-    @CallSuper
-    open fun onDestroy() {
-        println("${javaClass.simpleName} onDestroy")
-    }
+    open fun onDestroy() = Unit
 
     open fun onStart() = Unit
     open fun onStop() = Unit
