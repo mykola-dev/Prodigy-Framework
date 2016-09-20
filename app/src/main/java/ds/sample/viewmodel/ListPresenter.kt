@@ -1,30 +1,18 @@
 package ds.sample.viewmodel
 
 import android.databinding.ObservableField
+import ds.salo.IComponent
 import ds.salo.Presenter
 import ds.sample.adapter.NamesAdapter
 import ds.sample.data.Name
-import ds.sample.util.L
 
-class ListPresenter : Presenter() {
+class ListPresenter : Presenter<IComponent>() {
 
     val adapter = ObservableField<NamesAdapter>()
 
     override fun onCreate() {
-        L.v("ListPresenter created")
+        super.onCreate()
         adapter.set(NamesAdapter(component!!.getContext(), getData()))
-    }
-
-    override fun onAttach() {
-        L.v("ListPresenter attached")
-    }
-
-    override fun onDetach() {
-        L.v("ListPresenter detached")
-    }
-
-    override fun onDestroy() {
-        L.v("ListPresenter destroyed")
     }
 
     private fun getData(): List<Name> {

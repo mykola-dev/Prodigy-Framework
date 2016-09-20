@@ -7,7 +7,7 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 
-class Navigator(val presenter: Presenter) {
+class Navigator(val presenter: Presenter<*>) {
 
     var onDialogButton: ((Int) -> Unit)? = null
 
@@ -40,14 +40,18 @@ class Navigator(val presenter: Presenter) {
             throw IllegalStateException("activity is null")
     }
 
-    private fun commitFragment(cls: Class<out BindingFragment>, bundle: Bundle?) {
+    private fun commitFragment(cls: Class<out BindingFragment>, bundle: Bundle?, addToBackstack: Boolean = false) {
         println("commitFragment ${cls.name}")
         val a = presenter.getActivity()
         if (a != null) {
             val fragment = Fragment.instantiate(a, cls.name, bundle) as BindingFragment
             if (a is FragmentActivity) {
-                a.supportFragmentManager
+                val transaction = a
+                    .supportFragmentManager
                     .beginTransaction()
+                if (addToBackstack)
+                    transaction.addToBackStack(null)
+                transaction
                     .replace(fragment.getTargetLayout(), fragment, "fragment")
                     .commitNow()
             } else {
@@ -57,7 +61,7 @@ class Navigator(val presenter: Presenter) {
             throw IllegalStateException("activity is null")
     }
 
-    fun goto(cls: Class<out IComponent>, bundle: Bundle? = null) {
+    fun runComponent(cls: Class<out IComponent>, bundle: Bundle? = null) {
         println("goto ${cls.name} ${if (bundle != null) "with bundle" else ""}")
         if (Activity::class.java.isAssignableFrom(cls)) {
             startActivity(cls as Class<out BindingActivity>, bundle)
@@ -75,7 +79,7 @@ class Navigator(val presenter: Presenter) {
     /** Convenient helper to navigate between presenters
      * @return true if success
      */
-    fun run(p: Presenter, bundle: Bundle? = null): Boolean {
+    fun run(p: Presenter<*>, bundle: Bundle? = null): Boolean {
         val config = Salo.getConfig(p.javaClass)
 
         if (p.isAttached()) {
@@ -84,7 +88,7 @@ class Navigator(val presenter: Presenter) {
         } else if (!Salo.isAwaiting(p)) {
             Salo.putDelayed(config, p)
         }
-        goto(config.component, bundle)
+        runComponent(config.component, bundle)
         return true
     }
 
@@ -103,7 +107,7 @@ class Navigator(val presenter: Presenter) {
          }
          *//*if (callback != null)
             p.setCallback(callback)*//*
-        goto(config.bindingAware, bundle)
+        runComponent(config.bindingAware, bundle)
         return true
     }*/
 

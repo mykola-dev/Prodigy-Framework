@@ -14,7 +14,7 @@ abstract class BindingDialogFragment : DialogFragment(), IComponent, DialogInter
 
     data class ButtonData(val title: String, val action: Int)
 
-    override val delegate: BinderDelegate = BinderDelegate()
+    override val delegate = BinderDelegate()
     override val binding: ViewDataBinding by lazy { delegate.binding!! }
 
     override fun invalidateOptionsMenu() {

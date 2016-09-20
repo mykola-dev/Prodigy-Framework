@@ -1,24 +1,25 @@
 package ds.salo
 
 import android.app.Activity
+import android.support.annotation.CallSuper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 
-abstract class Presenter() {
+abstract class Presenter<C : IComponent> {
 
     var id = idGenerator
     val navigator by lazy { Navigator(this) }
-    var component: IComponent? = null
+    var component: C? = null
     var dead = false
     var justCreated = true
 
     val results = mutableListOf<Result<Any>>()
 
-    inline fun <reified T : Any> Presenter.setCallback(noinline cb: (T?) -> Unit) {
+    inline fun <reified T : Any> Presenter<*>.setCallback(noinline cb: (T?) -> Unit) {
         val cls: Class<T> = T::class.java
         val result: Result<T> = Result(cls, cb)
-        result.owner = this
+        //result.owner = this
         results.add(result as Result<Any>)
     }
 
@@ -34,16 +35,28 @@ abstract class Presenter() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // lifecycle and callbacks
 
-    open fun onCreate() = Unit
+    @CallSuper
+    open fun onCreate() {
+        println("${javaClass.simpleName} onCreate")
+    }
 
     /** BindingAware has been attached to presenter */
-    open fun onAttach() = Unit
+    @CallSuper
+    open fun onAttach() {
+        println("${javaClass.simpleName} onAttach")
+    }
 
     /** BindingAware has been detached from presenter */
-    open fun onDetach() = Unit
+    @CallSuper
+    open fun onDetach() {
+        println("${javaClass.simpleName} onDetach")
+    }
 
     /** Presenter has been destroyed and shouldn't be used. dead flag is true from now */
-    open fun onDestroy() = Unit
+    @CallSuper
+    open fun onDestroy() {
+        println("${javaClass.simpleName} onDestroy")
+    }
 
     open fun onStart() = Unit
     open fun onStop() = Unit
@@ -65,8 +78,8 @@ abstract class Presenter() {
     fun fireCallbacks() {
         results.forEach {
             //if (it.owner?.isAttached() ?: false) {
-                it.callback.invoke(it.result)
-                it.owner = null
+            it.callback.invoke(it.result)
+            //it.owner = null
             //}
         }
         results.clear()

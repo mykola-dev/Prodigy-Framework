@@ -5,6 +5,7 @@ import android.databinding.ObservableField
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import ds.salo.IComponent
 import ds.salo.Presenter
 import ds.salo.Salo
 import ds.sample.R
@@ -13,7 +14,7 @@ import ds.sample.view.TestActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainPresenter : Presenter() {
+class MainPresenter : Presenter<IComponent>() {
 
     // views
     val textField = ObservableField<String>()
@@ -21,26 +22,15 @@ class MainPresenter : Presenter() {
     private var notificationsEnabled = true
 
     override fun onCreate() {
-        L.v("main presenter created")
+        super.onCreate()
         val date = SimpleDateFormat.getDateTimeInstance().format(Date())
         textField.set(date)
     }
 
-    override fun onAttach() {
-        L.v("main presenter attached")
-    }
-
-    override fun onDetach() {
-        L.v("main presenter detached")
-    }
-
-    override fun onDestroy() {
-        L.v("main presenter destroyed")
-    }
 
     fun onScreen1ButtonClick(v: View) {
         L.v("clicked!")
-        navigator.goto(TestActivity::class.java)
+        navigator.runComponent(TestActivity::class.java)
     }
 
     fun onScreen2ButtonClick() {
@@ -74,6 +64,14 @@ class MainPresenter : Presenter() {
     fun onViewPagerDemo() {
         val p = ViewPagerPresenter()
         navigator.run(p)
+    }
+
+    fun onCustomComponent() {
+        val p = CustomComponentPresenter()
+        navigator.run(p)
+    }
+    fun onFragmentsTest() {
+        //todo
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {

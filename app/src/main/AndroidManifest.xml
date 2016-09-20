@@ -23,6 +23,7 @@
         <activity android:name="ds.sample.view.TestActivity2" />
         <activity android:name="ds.sample.view.CallbackActivity" />
         <activity android:name="ds.sample.view.ViewPagerActivity" />
+        <activity android:name="ds.sample.view.CustomComponentActivity" />
 
     </application>
 

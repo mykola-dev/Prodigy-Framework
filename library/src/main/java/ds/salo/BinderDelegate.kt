@@ -17,7 +17,7 @@ class BinderDelegate {
         private val ID = "KEY_ID"
     }
 
-    lateinit var presenter: Presenter
+    lateinit var presenter: Presenter<IComponent>
     var binding: ViewDataBinding? = null
     var presenterId = 0L    // used with fragments
 
@@ -26,7 +26,7 @@ class BinderDelegate {
 
         val id = savedState?.getLong(ID) ?: presenterId
         println("presenter id=$id")
-        presenter = Salo.provide(component, id)
+        presenter = Salo.provide(component, id) as Presenter<IComponent>
 
         if (binding == null) {
             val config = Salo.getConfig(component)
@@ -64,7 +64,7 @@ class BinderDelegate {
             binding?.unbind()
             binding = null
             presenter.component = null
-            presenterId=presenter.id
+            presenterId = presenter.id
         }
 
         val finishing: Boolean

@@ -41,6 +41,7 @@ val saloInitializer: Salo.() -> Unit = {
     bind<TestActivity2, TestPresenter2>(R.layout.activity_test2)
     bind<CallbackActivity, CallbackPresenter>(R.layout.activity_with_callback)
     bind<ViewPagerActivity, ViewPagerPresenter>(R.layout.activity_viewpager)
+    bind<CustomComponentActivity, CustomComponentPresenter>(R.layout.activity_test)
 
     bind<InputDialogFragment, DialogPresenter>(R.layout.dialog_input)
     bind<ListFragment, ListPresenter>(R.layout.fragment_list)

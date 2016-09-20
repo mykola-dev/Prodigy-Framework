@@ -70,7 +70,7 @@ abstract class BindingFragment : Fragment(), IComponent {
         return delegate.onOptionsItemSelected(item)
     }
 
-    fun getTargetLayout() = android.R.id.content
+    open fun getTargetLayout() = android.R.id.content
 
 
 }

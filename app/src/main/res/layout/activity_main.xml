@@ -71,6 +71,21 @@
             android:text="viewpager activity with fragments"
             android:onClick="@{v->presenter.onViewPagerDemo()}"
             />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="custom component"
+            android:onClick="@{v->presenter.onCustomComponent()}"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="fragments backstack with callbacks"
+            android:onClick="@{v->presenter.onFragmentsTest()}"
+            />
+
     </LinearLayout>
 </layout>
 

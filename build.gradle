@@ -33,7 +33,4 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-wrapper {
-    gradleVersion = '2.14.1'
-}
 
