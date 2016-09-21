@@ -15,7 +15,7 @@ class Navigator(val presenter: Presenter<*>) {
      * Run Activity
      */
     private fun startActivity(cls: Class<out BindingActivity>, bundle: Bundle? = null) {
-        println("startActivity ${cls.name}")
+        log("startActivity ${cls.name}")
         val a = presenter.getActivity()
         if (a != null) {
             val intent = Intent(a, cls)
@@ -27,7 +27,7 @@ class Navigator(val presenter: Presenter<*>) {
     }
 
     private fun startDialog(cls: Class<out BindingDialogFragment>, bundle: Bundle? = null) {
-        println("startDialog ${cls.name}")
+        log("startDialog ${cls.name}")
         val a = presenter.getActivity()
         if (a != null) {
             val dialogFragment = Fragment.instantiate(a, cls.name, bundle) as DialogFragment
@@ -41,7 +41,7 @@ class Navigator(val presenter: Presenter<*>) {
     }
 
     private fun commitFragment(cls: Class<out BindingFragment>, bundle: Bundle?, addToBackstack: Boolean = false) {
-        println("commitFragment ${cls.name}")
+        log("commitFragment ${cls.name}")
         val a = presenter.getActivity()
         if (a != null) {
             val fragment = Fragment.instantiate(a, cls.name, bundle) as BindingFragment
@@ -62,7 +62,7 @@ class Navigator(val presenter: Presenter<*>) {
     }
 
     fun runComponent(cls: Class<out IComponent>, bundle: Bundle? = null) {
-        println("goto ${cls.name} ${if (bundle != null) "with bundle" else ""}")
+        log("goto ${cls.name} ${if (bundle != null) "with bundle" else ""}")
         if (Activity::class.java.isAssignableFrom(cls)) {
             startActivity(cls as Class<out BindingActivity>, bundle)
         } else if (BindingDialogFragment::class.java.isAssignableFrom(cls)) {
@@ -79,15 +79,16 @@ class Navigator(val presenter: Presenter<*>) {
     /** Convenient helper to navigate between presenters
      * @return true if success
      */
-    fun run(p: Presenter<*>, bundle: Bundle? = null): Boolean {
+    fun run(p: Presenter<*>, bundle: Bundle = Bundle()): Boolean {
         val config = Prodigy.getConfig(p.javaClass)
 
         if (p.isAttached()) {
-            println("presenter ${p.javaClass.simpleName} already running. skip any actions")
+            log("presenter ${p.javaClass.simpleName} already running. skip any actions")
             return false
         } else if (!Prodigy.isAwaiting(p)) {
-            Prodigy.putDelayed(config, p)
+            Prodigy.putDelayed(p)
         }
+        bundle.putLong(BinderDelegate.PRESENTER_ID, p.id)
         runComponent(config.component, bundle)
         return true
     }
@@ -100,7 +101,7 @@ class Navigator(val presenter: Presenter<*>) {
          val config = Salo.getConfig(p.javaClass)
 
          if (p.isAttached()) {
-             println("presenter ${p.javaClass.simpleName} already running. skip any actions")
+             log("presenter ${p.javaClass.simpleName} already running. skip any actions")
              return false
          } else if (!Salo.isAwaiting(p)) {
              Salo.putDelayed(config, p)

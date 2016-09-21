@@ -1,6 +1,7 @@
 package ds.sample.viewmodel
 
-import android.content.DialogInterface
+import android.content.DialogInterface.BUTTON_NEGATIVE
+import android.content.DialogInterface.BUTTON_POSITIVE
 import android.databinding.ObservableField
 import android.view.Menu
 import android.view.MenuItem
@@ -53,8 +54,8 @@ class MainPresenter : Presenter<IComponent>() {
         p.setCallback<Int> {
             L.v("callbacked!")
             when (it) {
-                DialogInterface.BUTTON_POSITIVE -> toast("ok pressed")
-                DialogInterface.BUTTON_NEGATIVE -> toast("cancel pressed")
+                BUTTON_POSITIVE -> toast("ok pressed")
+                BUTTON_NEGATIVE -> toast("cancel pressed")
             }
         }
         navigator.run(p)
@@ -69,6 +70,7 @@ class MainPresenter : Presenter<IComponent>() {
         val p = CustomComponentPresenter()
         navigator.run(p)
     }
+
     fun onFragmentsTest() {
         //todo
     }

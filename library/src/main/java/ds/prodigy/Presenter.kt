@@ -9,7 +9,7 @@ import rx.subjects.BehaviorSubject
 abstract class Presenter<C : IComponent> {
 
     var id = idGenerator
-    val navigator by lazy { Navigator(this) }
+    open val navigator by lazy { Navigator(this) }
     var component: C? = null
     var dead = false
     var justCreated = true

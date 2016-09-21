@@ -14,22 +14,21 @@ import android.view.MenuItem
 class BinderDelegate {
 
     companion object {
-        private val ID = "KEY_ID"
+        internal val PRESENTER_ID = "KEY_PRESENTER_ID"
     }
 
     lateinit var presenter: Presenter<IComponent>
     var binding: ViewDataBinding? = null
-    var presenterId = 0L    // used with fragments
 
     fun onCreate(component: IComponent, savedState: Bundle?) {
-        println("${component.javaClass.simpleName} delegated onCreate")
+        log("${component.javaClass.simpleName} delegated onCreate")
 
-        val id = savedState?.getLong(ID) ?: presenterId
-        println("presenter id=$id")
-        presenter = Prodigy.provide(component, id) as Presenter<IComponent>
+        val id = fetchPresenterId(component, savedState)
+        log("presenter id=$id")
+        val p = Prodigy.provide(component.javaClass, id) as Presenter<IComponent>
 
         if (binding == null) {
-            val config = Prodigy.getConfig(component)
+            val config = Prodigy.getConfig(p.javaClass)
             if (component is Activity)
                 binding = DataBindingUtil.setContentView(component, config.layout)
             else if (component is Fragment)
@@ -37,40 +36,57 @@ class BinderDelegate {
             else
                 throw IllegalStateException("This type of BindingAware is not supported")
 
-            val result = binding!!.setVariable(config.bindingVariable, presenter)
+            val result = binding!!.setVariable(config.bindingVariable, p)
             if (!result)
                 throw IllegalStateException("Binding ${config.component.simpleName} to ${config.presenter.simpleName} has been failed")
 
-            presenter.component = component
-            if (presenter.justCreated) {
-                println("${presenter.javaClass.simpleName} onCreate")
-                presenter.onCreate()
-                presenter.lifecycleSignal.onNext(LifecycleEvent.CREATE)
+            p.component = component
+            if (p.justCreated) {
+                log("${p.javaClass.simpleName} onCreate")
+                p.onCreate()
+                p.lifecycleSignal.onNext(LifecycleEvent.CREATE)
             }
 
-            println("${presenter.javaClass.simpleName} onAttach")
-            presenter.onAttach()
-            presenter.lifecycleSignal.onNext(LifecycleEvent.ATTACH)
-            presenter.justCreated = false
+            log("${p.javaClass.simpleName} onAttach")
+            p.onAttach()
+            p.lifecycleSignal.onNext(LifecycleEvent.ATTACH)
+            p.justCreated = false
+            presenter = p
         }
 
     }
 
+    @Suppress("SENSELESS_COMPARISON")
+    private fun fetchPresenterId(component: IComponent, savedState: Bundle?): Long {
+        var id = 0L
+        try {
+            id = presenter.id
+        } catch (e: Exception) {
+            id = savedState?.getLong(PRESENTER_ID) ?: 0
+            if (id == 0L) {
+                when (component) {
+                    is Activity -> id = component.intent.getLongExtra(PRESENTER_ID, 0)
+                    is Fragment -> id = component.arguments?.getLong(PRESENTER_ID, 0) ?: 0
+                }
+            }
+        }
+        return id
+    }
+
     fun onDestroy(component: IComponent) {
-        println("${component.javaClass.simpleName} delegated onDestroy")
+        log("${component.javaClass.simpleName} delegated onDestroy")
         if (presenter.dead) {
-            println("already dead")
+            log("already dead")
             return
         }
 
         if (presenter.isAttached()) {
-            println("${presenter.javaClass.simpleName} onDetach")
+            log("${presenter.javaClass.simpleName} onDetach")
             presenter.onDetach()
             presenter.lifecycleSignal.onNext(LifecycleEvent.DETACH)
             binding?.unbind()
             binding = null
             presenter.component = null
-            presenterId = presenter.id
         }
 
         val finishing: Boolean
@@ -79,7 +95,7 @@ class BinderDelegate {
         } else if (component is DialogFragment) {
             finishing = component.isRemoving
         } else if (component is Fragment) {
-            println("${component.javaClass.simpleName} isFinishing=${component.activity.isFinishing} isRemoving=${component.isRemoving}}")
+            log("${component.javaClass.simpleName} isFinishing=${component.activity.isFinishing} isRemoving=${component.isRemoving}}")
             finishing = component.isRemoving || component.activity.isFinishing
         } else {
             throw IllegalStateException("doesnt support yet")
@@ -87,7 +103,7 @@ class BinderDelegate {
 
         if (finishing) {
             presenter.fireCallbacks()
-            println("${presenter.javaClass.simpleName} onDestroy")
+            log("${presenter.javaClass.simpleName} onDestroy")
             presenter.onDestroy()
             presenter.lifecycleSignal.onNext(LifecycleEvent.DESTROY)
             Prodigy.remove(presenter)
@@ -97,42 +113,42 @@ class BinderDelegate {
     }
 
     fun onSaveInstanceState(state: Bundle) {
-        println("delegated onSaveInstanceState")
-        state.putLong(ID, presenter.id)
+        log("delegated onSaveInstanceState")
+        state.putLong(PRESENTER_ID, presenter.id)
     }
 
     fun onStart(component: IComponent) {
-        println("${component.javaClass.simpleName} delegated onStart")
+        log("${component.javaClass.simpleName} delegated onStart")
         presenter.onStart()
     }
 
     fun onResume(component: IComponent) {
-        println("${component.javaClass.simpleName} delegated onResume")
+        log("${component.javaClass.simpleName} delegated onResume")
         presenter.onResume()
     }
 
     fun onPause(component: IComponent) {
-        println("${component.javaClass.simpleName} delegated onPause")
+        log("${component.javaClass.simpleName} delegated onPause")
         presenter.onPause()
     }
 
     fun onStop(component: IComponent) {
-        println("${component.javaClass.simpleName} delegated onStop")
+        log("${component.javaClass.simpleName} delegated onStop")
         presenter.onStop()
     }
 
     fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        println("delegated onPrepareOptionsMenu")
+        log("delegated onPrepareOptionsMenu")
         return presenter.onPrepareOptionsMenu(menu)
     }
 
     fun onOptionsItemSelected(item: MenuItem): Boolean {
-        println("delegated onOptionsItemSelected")
+        log("delegated onOptionsItemSelected")
         return presenter.onOptionsItemSelected(item)
     }
 
     fun finish(component: IComponent) {
-        println("${component.javaClass.simpleName} delegated finish")
+        log("${component.javaClass.simpleName} delegated finish")
         when (component) {
             is Activity -> component.finish()
             is DialogFragment -> component.dismiss()
@@ -142,7 +158,7 @@ class BinderDelegate {
     }
 
     fun onDialogClick(dialog: DialogInterface, which: Int) {
-        println("dialog button clicked")
+        log("dialog button clicked")
         presenter.navigator.onDialogButton?.invoke(which)
     }
 }

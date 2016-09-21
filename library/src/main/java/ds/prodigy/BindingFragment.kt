@@ -17,14 +17,7 @@ abstract class BindingFragment : Fragment(), IComponent {
         activity.invalidateOptionsMenu()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        println("fragment ${javaClass.simpleName} onCreate")
-        //delegate.onCreate(this, savedInstanceState)
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        println("fragment ${javaClass.simpleName} onCreateView")
         delegate.onCreate(this, savedInstanceState)
         return binding.root
     }
@@ -40,19 +33,17 @@ abstract class BindingFragment : Fragment(), IComponent {
     }
 
     override fun onDestroyView() {
-        println("fragment ${javaClass.simpleName} onDestroyView")
         delegate.onDestroy(this)
         super.onDestroyView()
     }
 
     override fun onDestroy() {
-        println("fragment ${javaClass.simpleName} onDestroy")
         delegate.onDestroy(this)
         super.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        println("fragment ${javaClass.simpleName} onSaveInstanceState")
+        log("fragment ${javaClass.simpleName} onSaveInstanceState")
         delegate.onSaveInstanceState(outState)
         //savedState = true
         super.onSaveInstanceState(outState)

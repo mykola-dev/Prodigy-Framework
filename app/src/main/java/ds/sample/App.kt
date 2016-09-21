@@ -36,15 +36,15 @@ class App : Application() {
 
 // todo do it with APT
 val prodigyInitializer: Prodigy.() -> Unit = {
-    bind<MainActivity, MainPresenter>(R.layout.activity_main)
-    bind<TestActivity, TestPresenter>(R.layout.activity_test)
-    bind<EmptyActivity, TestPresenter2>(R.layout.activity_test2)
-    bind<CallbackActivity, CallbackPresenter>(R.layout.activity_with_callback)
-    bind<ViewPagerActivity, ViewPagerPresenter>(R.layout.activity_viewpager)
-    bind<CustomComponentActivity, CustomComponentPresenter>(R.layout.activity_custom)
+    bind<MainPresenter, MainActivity>(R.layout.activity_main)
+    bind<TestPresenter, TestActivity>(R.layout.activity_test)
+    bind<TestPresenter2, EmptyActivity>(R.layout.activity_test2)
+    bind<CallbackPresenter, EmptyActivity>(R.layout.activity_with_callback)
+    bind<ViewPagerPresenter, ViewPagerActivity>(R.layout.activity_viewpager)
+    bind<CustomComponentPresenter, CustomComponentActivity>(R.layout.activity_custom)
 
-    bind<InputDialogFragment, DialogPresenter>(R.layout.dialog_input)
-    bind<ListFragment, ListPresenter>(R.layout.fragment_list)
-    bind<SimpleFragment, SimpleFragmentPresenter>(R.layout.fragment_simple)
+    bind<DialogPresenter, InputDialogFragment>(R.layout.dialog_input)
+    bind<ListPresenter, ListFragment>(R.layout.fragment_list)
+    bind<SimpleFragmentPresenter, SimpleFragment>(R.layout.fragment_simple)
 }
 

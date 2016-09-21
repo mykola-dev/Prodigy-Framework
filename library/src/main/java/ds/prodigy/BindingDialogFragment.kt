@@ -37,7 +37,6 @@ abstract class BindingDialogFragment : DialogFragment(), IComponent, DialogInter
     }
 
     override fun onDestroyView() {
-        println("fragment onDestroyView")
         delegate.onDestroy(this)
         super.onDestroyView()
     }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.databinding.ViewDataBinding
 
 interface IComponent {
+
     val delegate: BinderDelegate
     val binding: ViewDataBinding
 
