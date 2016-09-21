@@ -1,4 +1,4 @@
-package ds.salo
+package ds.prodigy
 
 import rx.Observable
 

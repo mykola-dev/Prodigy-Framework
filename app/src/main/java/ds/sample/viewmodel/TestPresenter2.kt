@@ -1,8 +1,8 @@
 package ds.sample.viewmodel
 
 import android.databinding.ObservableField
-import ds.salo.IComponent
-import ds.salo.Presenter
+import ds.prodigy.IComponent
+import ds.prodigy.Presenter
 import ds.sample.util.L
 
 class TestPresenter2(val name: String, val text: String) : Presenter<IComponent>() {

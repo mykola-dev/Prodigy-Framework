@@ -1,8 +1,8 @@
 package ds.sample.viewmodel
 
 import android.databinding.ObservableField
-import ds.salo.IComponent
-import ds.salo.Presenter
+import ds.prodigy.IComponent
+import ds.prodigy.Presenter
 import ds.sample.adapter.NamesAdapter
 import ds.sample.data.Name
 

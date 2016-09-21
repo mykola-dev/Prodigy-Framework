@@ -1,7 +1,7 @@
 package ds.sample.view
 
 import android.content.DialogInterface
-import ds.salo.BindingDialogFragment
+import ds.prodigy.BindingDialogFragment
 
 class InputDialogFragment : BindingDialogFragment() {
 

@@ -1,4 +1,4 @@
-package ds.salo
+package ds.prodigy
 
 import android.content.Context
 import android.databinding.ViewDataBinding

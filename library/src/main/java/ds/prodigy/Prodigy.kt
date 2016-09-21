@@ -1,20 +1,25 @@
-package ds.salo
+package ds.prodigy
 
 import android.support.annotation.LayoutRes
 
 // framework helper. shouldn't use it directly in most cases
-object Salo {
+object Prodigy {
 
     val configs = mutableListOf<Configuration>()
     internal val presentersCache = mutableMapOf<String, Presenter<*>>()
     internal val unbindedQueue = mutableMapOf<Configuration, Presenter<*>>()
 
-    fun init(block: Salo.() -> Unit) {
+    fun init(block: Prodigy.() -> Unit) {
         block(this)
     }
 
     inline fun <reified C : IComponent, reified P : Presenter<*>> bind(@LayoutRes layout: Int, bindingVariable: Int = BR.presenter) {
-        configs.add(Configuration(C::class.java, P::class.java, layout, bindingVariable))
+        val config = configs.firstOrNull() { it.presenter == P::class.java }
+        if (config == null)
+            configs.add(Configuration(C::class.java, P::class.java, layout, bindingVariable))
+        else
+            throw IllegalStateException("Presenter already configured")
+
     }
 
     // when BindingAware exists. do not use it directly!

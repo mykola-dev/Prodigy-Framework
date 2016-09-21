@@ -5,9 +5,9 @@ import android.databinding.ObservableField
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import ds.salo.IComponent
-import ds.salo.Presenter
-import ds.salo.Salo
+import ds.prodigy.IComponent
+import ds.prodigy.Presenter
+import ds.prodigy.Prodigy
 import ds.sample.R
 import ds.sample.util.L
 import ds.sample.view.TestActivity
@@ -88,7 +88,7 @@ class MainPresenter : Presenter<IComponent>() {
                 component?.invalidateOptionsMenu()
             }
             R.id.menu_memory_diagnostic -> {
-                toast(Salo.getDiagnostics())
+                toast(Prodigy.getDiagnostics())
             }
         }
         return true

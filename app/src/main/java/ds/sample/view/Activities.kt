@@ -1,7 +1,7 @@
 package ds.sample.view
 
 import android.view.Menu
-import ds.salo.BindingActivity
+import ds.prodigy.BindingActivity
 import ds.sample.R
 import ds.sample.util.toast
 
@@ -19,7 +19,7 @@ class TestActivity : BindingActivity() {
     }
 }
 
-class TestActivity2 : BindingActivity()
+class EmptyActivity : BindingActivity()
 class CallbackActivity : BindingActivity()
 class ViewPagerActivity : BindingActivity()
 class CustomComponentActivity : BindingActivity(), CustomComponent {

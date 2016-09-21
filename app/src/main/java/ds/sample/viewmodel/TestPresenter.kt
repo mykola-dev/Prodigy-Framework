@@ -2,9 +2,9 @@ package ds.sample.viewmodel
 
 import android.databinding.ObservableField
 import android.view.MenuItem
-import ds.salo.IComponent
-import ds.salo.Presenter
-import ds.salo.respectLifeCycle
+import ds.prodigy.IComponent
+import ds.prodigy.Presenter
+import ds.prodigy.respectLifeCycle
 import ds.sample.R
 import ds.sample.util.L
 import ds.sample.util.applySchedulers

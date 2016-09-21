@@ -2,8 +2,8 @@ package ds.sample.viewmodel
 
 import android.databinding.ObservableField
 import android.support.v4.app.FragmentActivity
-import ds.salo.IComponent
-import ds.salo.Presenter
+import ds.prodigy.IComponent
+import ds.prodigy.Presenter
 import ds.sample.adapter.ViewPagerAdapter
 
 class ViewPagerPresenter() : Presenter<IComponent>() {

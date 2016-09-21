@@ -1,4 +1,4 @@
-package ds.salo
+package ds.prodigy
 
 import android.app.Activity
 import android.content.Intent
@@ -80,13 +80,13 @@ class Navigator(val presenter: Presenter<*>) {
      * @return true if success
      */
     fun run(p: Presenter<*>, bundle: Bundle? = null): Boolean {
-        val config = Salo.getConfig(p.javaClass)
+        val config = Prodigy.getConfig(p.javaClass)
 
         if (p.isAttached()) {
             println("presenter ${p.javaClass.simpleName} already running. skip any actions")
             return false
-        } else if (!Salo.isAwaiting(p)) {
-            Salo.putDelayed(config, p)
+        } else if (!Prodigy.isAwaiting(p)) {
+            Prodigy.putDelayed(config, p)
         }
         runComponent(config.component, bundle)
         return true

@@ -1,4 +1,4 @@
-package ds.salo
+package ds.prodigy
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -26,10 +26,10 @@ class BinderDelegate {
 
         val id = savedState?.getLong(ID) ?: presenterId
         println("presenter id=$id")
-        presenter = Salo.provide(component, id) as Presenter<IComponent>
+        presenter = Prodigy.provide(component, id) as Presenter<IComponent>
 
         if (binding == null) {
-            val config = Salo.getConfig(component)
+            val config = Prodigy.getConfig(component)
             if (component is Activity)
                 binding = DataBindingUtil.setContentView(component, config.layout)
             else if (component is Fragment)
@@ -90,7 +90,7 @@ class BinderDelegate {
             println("${presenter.javaClass.simpleName} onDestroy")
             presenter.onDestroy()
             presenter.lifecycleSignal.onNext(LifecycleEvent.DESTROY)
-            Salo.remove(presenter)
+            Prodigy.remove(presenter)
             presenter.dead = true
 
         }

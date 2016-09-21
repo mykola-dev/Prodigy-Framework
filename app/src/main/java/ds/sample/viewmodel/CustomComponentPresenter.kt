@@ -1,6 +1,6 @@
 package ds.sample.viewmodel
 
-import ds.salo.Presenter
+import ds.prodigy.Presenter
 import ds.sample.view.CustomComponent
 
 class CustomComponentPresenter : Presenter<CustomComponent>() {

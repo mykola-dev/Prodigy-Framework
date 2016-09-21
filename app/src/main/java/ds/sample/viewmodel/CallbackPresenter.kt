@@ -1,7 +1,7 @@
 package ds.sample.viewmodel
 
-import ds.salo.IComponent
-import ds.salo.Presenter
+import ds.prodigy.IComponent
+import ds.prodigy.Presenter
 
 class CallbackPresenter() : Presenter<IComponent>() {
 
