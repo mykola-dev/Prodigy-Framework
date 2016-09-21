@@ -18,7 +18,7 @@ class TestPresenter : Presenter<IComponent>() {
 
     val text = ObservableField<String>("")
 
-    val generator = Observable.just("AWESOME DATA", "another data", "latest data")
+    val generator = Observable.range(1, 3)
         .zipWith(Observable.interval(1, TimeUnit.SECONDS), { d, t -> d })
 
     override fun onCreate() {
@@ -27,7 +27,6 @@ class TestPresenter : Presenter<IComponent>() {
 
     override fun onAttach() {
         add("[attached]")
-        // lifecycle test
     }
 
     override fun onDetach() {
@@ -38,12 +37,11 @@ class TestPresenter : Presenter<IComponent>() {
         when (item.itemId) {
             R.id.menu_next -> {
                 generator
-                    .doOnNext { L.v(it) }
+                    .doOnNext { L.v("isAttached=${isAttached()} AWESOME DATA $it") }
                     .applySchedulers()
                     .respectLifeCycle(this)
                     .subscribe {
-                        L.v("isAttached=${isAttached()} data=$it")
-                        add(it)
+                        add("AWESOME DATA $it")
                     }
                 navigator.runComponent(TestActivity::class.java)
             }
