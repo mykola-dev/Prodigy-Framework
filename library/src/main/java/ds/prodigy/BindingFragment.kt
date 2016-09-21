@@ -11,8 +11,6 @@ abstract class BindingFragment : Fragment(), IComponent {
     override val delegate: BinderDelegate = BinderDelegate()
     override val binding: ViewDataBinding by lazy { delegate.binding!! }
 
-    //var savedState = false
-
     override fun invalidateOptionsMenu() {
         activity.invalidateOptionsMenu()
     }
@@ -45,7 +43,6 @@ abstract class BindingFragment : Fragment(), IComponent {
     override fun onSaveInstanceState(outState: Bundle) {
         log("fragment ${javaClass.simpleName} onSaveInstanceState")
         delegate.onSaveInstanceState(outState)
-        //savedState = true
         super.onSaveInstanceState(outState)
     }
 

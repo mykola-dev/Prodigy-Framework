@@ -1,6 +1,7 @@
 package ds.sample.viewmodel
 
 import android.databinding.ObservableField
+import android.os.Bundle
 import ds.prodigy.IComponent
 import ds.prodigy.Presenter
 import ds.sample.adapter.NamesAdapter
@@ -10,7 +11,7 @@ class ListPresenter : Presenter<IComponent>() {
 
     val adapter = ObservableField<NamesAdapter>()
 
-    override fun onCreate() {
+    override fun onCreate(bundle: Bundle?) {
         adapter.set(NamesAdapter(component!!.getContext(), getData()))
     }
 

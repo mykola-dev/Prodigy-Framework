@@ -5,6 +5,9 @@ import ds.prodigy.BindingActivity
 import ds.sample.R
 import ds.sample.util.toast
 
+class EmptyActivity : BindingActivity()
+class ViewPagerActivity : BindingActivity()
+
 class MainActivity : BindingActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
@@ -19,11 +22,13 @@ class TestActivity : BindingActivity() {
     }
 }
 
-class EmptyActivity : BindingActivity()
-class CallbackActivity : BindingActivity()
-class ViewPagerActivity : BindingActivity()
 class CustomComponentActivity : BindingActivity(), CustomComponent {
     override fun showToast(text: String) {
         toast(text)
     }
 }
+
+class ToolBarActivity : BindingActivity(){
+
+}
+

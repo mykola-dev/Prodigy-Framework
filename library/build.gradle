@@ -24,7 +24,7 @@ kapt {
 }
 
 dependencies {
-    def supportVersion = '24.2.1'
+    def supportVersion = '23.4.0'
     compile "com.android.support:appcompat-v7:$supportVersion"
 
     compile 'io.reactivex:rxjava:1.2.0'

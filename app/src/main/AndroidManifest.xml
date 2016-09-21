@@ -21,7 +21,7 @@
 
         <activity android:name="ds.sample.view.TestActivity" />
         <activity android:name="ds.sample.view.EmptyActivity" />
-        <activity android:name="ds.sample.view.CallbackActivity" />
+        <activity android:name="ds.sample.view.ToolBarActivity" />
         <activity android:name="ds.sample.view.ViewPagerActivity" />
         <activity android:name="ds.sample.view.CustomComponentActivity" />
 

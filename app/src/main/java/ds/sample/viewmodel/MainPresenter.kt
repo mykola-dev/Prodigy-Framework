@@ -3,6 +3,7 @@ package ds.sample.viewmodel
 import android.content.DialogInterface.BUTTON_NEGATIVE
 import android.content.DialogInterface.BUTTON_POSITIVE
 import android.databinding.ObservableField
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -22,7 +23,7 @@ class MainPresenter : Presenter<IComponent>() {
 
     private var notificationsEnabled = true
 
-    override fun onCreate() {
+    override fun onCreate(bundle: Bundle?) {
         val date = SimpleDateFormat.getDateTimeInstance().format(Date())
         textField.set(date)
     }
@@ -72,7 +73,7 @@ class MainPresenter : Presenter<IComponent>() {
     }
 
     fun onFragmentsTest() {
-        //todo
+        navigator.run(ToolBarPresenter())
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {

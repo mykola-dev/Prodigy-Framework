@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="presenter"
+            type="ds.sample.viewmodel.ButtonFragmentPresenter"
+            />
+    </data>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="@{v->presenter.onButton()}"
+        android:text="@{presenter.buttonText}"
+
+        />
+</layout>

@@ -1,6 +1,7 @@
 package ds.prodigy
 
 import android.app.Activity
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -35,7 +36,7 @@ abstract class Presenter<C : IComponent> {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // lifecycle and callbacks
 
-    open fun onCreate() = Unit
+    open fun onCreate(bundle: Bundle?) = Unit
 
     /** BindingAware has been attached to presenter */
     open fun onAttach() = Unit

@@ -4,16 +4,15 @@ import android.databinding.ObservableField
 import android.os.Bundle
 import ds.prodigy.IComponent
 import ds.prodigy.Presenter
-import ds.sample.util.L
 
-class DialogPresenter() : Presenter<IComponent>() {
+class ToolBarPresenter : Presenter<IComponent>() {
 
-    val editField = ObservableField<String>()
+    // views
+    val toolbarTitle = ObservableField<String>("This is Toolbar!")
 
     override fun onCreate(bundle: Bundle?) {
-        navigator.onDialogButton = {
-            L.v("set result...")
-            setResult(it)
+        if (justCreated) {
+            navigator.run(ButtonFragmentPresenter())
         }
     }
 

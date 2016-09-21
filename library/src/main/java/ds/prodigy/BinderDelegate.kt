@@ -20,6 +20,8 @@ class BinderDelegate {
     lateinit var presenter: Presenter<IComponent>
     var binding: ViewDataBinding? = null
 
+    private var savedState = false  // for fragment only
+
     fun onCreate(component: IComponent, savedState: Bundle?) {
         log("${component.javaClass.simpleName} delegated onCreate")
 
@@ -43,7 +45,7 @@ class BinderDelegate {
             p.component = component
             if (p.justCreated) {
                 log("${p.javaClass.simpleName} onCreate")
-                p.onCreate()
+                p.onCreate(savedState)
                 p.lifecycleSignal.onNext(LifecycleEvent.CREATE)
             }
 
@@ -62,12 +64,10 @@ class BinderDelegate {
         try {
             id = presenter.id
         } catch (e: Exception) {
-            id = savedState?.getLong(PRESENTER_ID) ?: 0
-            if (id == 0L) {
-                when (component) {
-                    is Activity -> id = component.intent.getLongExtra(PRESENTER_ID, 0)
-                    is Fragment -> id = component.arguments?.getLong(PRESENTER_ID, 0) ?: 0
-                }
+            id = savedState?.getLong(PRESENTER_ID) ?: when (component) {
+                is Activity -> component.intent.getLongExtra(PRESENTER_ID, 0)
+                is Fragment -> component.arguments?.getLong(PRESENTER_ID, 0) ?: 0
+                else -> 0
             }
         }
         return id
@@ -95,7 +95,7 @@ class BinderDelegate {
         } else if (component is DialogFragment) {
             finishing = component.isRemoving
         } else if (component is Fragment) {
-            log("${component.javaClass.simpleName} isFinishing=${component.activity.isFinishing} isRemoving=${component.isRemoving}}")
+            log("${component.javaClass.simpleName} isFinishing=${component.activity.isFinishing} isRemoving=${component.isRemoving} stateSaved=$savedState")
             finishing = component.isRemoving || component.activity.isFinishing
         } else {
             throw IllegalStateException("doesnt support yet")
@@ -113,8 +113,9 @@ class BinderDelegate {
     }
 
     fun onSaveInstanceState(state: Bundle) {
-        log("delegated onSaveInstanceState")
+        log("${presenter.javaClass.simpleName} delegated onSaveInstanceState")
         state.putLong(PRESENTER_ID, presenter.id)
+        savedState = true
     }
 
     fun onStart(component: IComponent) {

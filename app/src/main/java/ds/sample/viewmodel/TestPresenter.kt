@@ -1,6 +1,7 @@
 package ds.sample.viewmodel
 
 import android.databinding.ObservableField
+import android.os.Bundle
 import android.view.MenuItem
 import ds.prodigy.IComponent
 import ds.prodigy.Presenter
@@ -21,7 +22,7 @@ class TestPresenter : Presenter<IComponent>() {
     val generator = Observable.range(1, 3)
         .zipWith(Observable.interval(1, TimeUnit.SECONDS), { d, t -> d })
 
-    override fun onCreate() {
+    override fun onCreate(bundle: Bundle?) {
         add("[created]")
     }
 
