@@ -1,7 +1,6 @@
 package ds.sample.viewmodel
 
 import android.databinding.ObservableField
-import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentPagerAdapter
 import ds.prodigy.Presenter
@@ -12,10 +11,10 @@ class ViewPagerPresenter() : Presenter<IComponent>() {
 
     val adapter = ObservableField<FragmentPagerAdapter>()
 
-    override fun onCreate(bundle: Bundle?) {
+    override fun onAttach() {
         val a = component?.getActivity()
         a as FragmentActivity
-        adapter.set(ViewPagerAdapter(a))
+        adapter.set(ViewPagerAdapter(a))    // adapter should be recreated on each reAttach since it holds the fragment instances
     }
 
 }

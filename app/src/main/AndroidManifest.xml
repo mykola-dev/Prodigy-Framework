@@ -24,7 +24,6 @@
         <activity android:name="ds.sample.view.ToolBarActivity" />
         <activity android:name="ds.sample.view.ViewPagerActivity" />
         <activity android:name="ds.sample.view.CustomComponentActivity" />
-        <activity android:name="ds.sample.view.NativeViewPagerActivity" />
 
     </application>
 

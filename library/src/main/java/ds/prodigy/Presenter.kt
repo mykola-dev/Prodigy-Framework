@@ -11,8 +11,10 @@ import android.view.MenuItem
 import android.widget.Toast
 import ds.prodigy.component.IComponent
 import rx.subjects.BehaviorSubject
+import java.util.*
 
 abstract class Presenter<C : IComponent> {
+    val TAG = "P"
 
     companion object {
         var idGenerator: Long = 1
@@ -38,8 +40,12 @@ abstract class Presenter<C : IComponent> {
     }
 
     inline fun <reified T : Any> setResult(result: T?) {
-        val r: Result<in T> = results.first { T::class.java == it.cls }
-        r.result = result
+        try {
+            val r: Result<in T> = results.first { T::class.java == it.cls }
+            r.result = result
+        } catch (e: NoSuchElementException) {
+            L.e(TAG, "Can't set result for null callback")
+        }
     }
 
     fun isAttached() = component != null

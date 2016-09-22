@@ -1,9 +1,7 @@
 package ds.sample.viewmodel
 
-import android.app.Activity
 import android.content.DialogInterface.BUTTON_NEGATIVE
 import android.content.DialogInterface.BUTTON_POSITIVE
-import android.content.Intent
 import android.databinding.ObservableField
 import android.os.Bundle
 import android.view.Menu
@@ -14,7 +12,6 @@ import ds.prodigy.Prodigy
 import ds.prodigy.component.IComponent
 import ds.sample.R
 import ds.sample.util.L
-import ds.sample.view.NativeViewPagerActivity
 import ds.sample.view.TestActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -77,10 +74,6 @@ class MainPresenter : Presenter<IComponent>() {
 
     fun onFragmentsTest() {
         navigator.run(ToolBarPresenter())
-    }
-
-    fun onNativeTest() {
-        (component as Activity).startActivity(Intent(component as Activity, NativeViewPagerActivity::class.java))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
