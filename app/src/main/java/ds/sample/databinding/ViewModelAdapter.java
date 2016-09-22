@@ -51,6 +51,12 @@ abstract public class ViewModelAdapter<VM, D> extends RecyclerView.Adapter<ViewM
         holder.getBinding().executePendingBindings();
     }
 
+    @Override
+    public void onViewRecycled(ViewModelHolder<ViewDataBinding, VM> holder) {
+        super.onViewRecycled(holder);
+        holder.getBinding().unbind();
+    }
+
     public D getItem(int position) {
         return data.get(position);
     }

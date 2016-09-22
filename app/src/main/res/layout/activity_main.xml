@@ -91,6 +91,13 @@
                 android:text="fragments backstack with callbacks"
                 />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{v->presenter.onNativeTest()}"
+                android:text="classic viewpager activity"
+                />
+
         </LinearLayout>
     </ScrollView>
 </layout>

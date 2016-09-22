@@ -1,12 +1,15 @@
-package ds.prodigy
+package ds.prodigy.component
 
 import android.content.Context
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
+import ds.prodigy.BinderDelegate
+import ds.prodigy.L
 
 abstract class BindingFragment : Fragment(), IComponent {
+    val TAG="F"
 
     override val delegate: BinderDelegate = BinderDelegate()
     override val binding: ViewDataBinding by lazy { delegate.binding!! }
@@ -15,7 +18,14 @@ abstract class BindingFragment : Fragment(), IComponent {
         activity.invalidateOptionsMenu()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        L.v(TAG, "onCreate")
+        delegate.onCreate(this, savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        L.v(TAG, "onCreateView")
         delegate.onCreate(this, savedInstanceState)
         return binding.root
     }
@@ -31,17 +41,18 @@ abstract class BindingFragment : Fragment(), IComponent {
     }
 
     override fun onDestroyView() {
+        L.v(TAG, "onDestroyView")
         delegate.onDestroy(this)
         super.onDestroyView()
     }
 
     override fun onDestroy() {
+        L.v(TAG, "onDestroy")
         delegate.onDestroy(this)
         super.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        log("fragment ${javaClass.simpleName} onSaveInstanceState")
         delegate.onSaveInstanceState(outState)
         super.onSaveInstanceState(outState)
     }

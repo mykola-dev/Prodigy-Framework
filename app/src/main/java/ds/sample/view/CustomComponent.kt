@@ -1,6 +1,6 @@
 package ds.sample.view
 
-import ds.prodigy.IComponent
+import ds.prodigy.component.IComponent
 
 interface CustomComponent : IComponent {
 

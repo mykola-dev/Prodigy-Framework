@@ -1,4 +1,4 @@
-package ds.prodigy
+package ds.prodigy.component
 
 import android.app.Dialog
 import android.content.Context
@@ -7,10 +7,13 @@ import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import ds.prodigy.BinderDelegate
 
 abstract class BindingDialogFragment : DialogFragment(), IComponent, DialogInterface.OnClickListener {
+    val TAG = "D"
 
     data class ButtonData(val title: String, val action: Int)
 
@@ -22,6 +25,7 @@ abstract class BindingDialogFragment : DialogFragment(), IComponent, DialogInter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.v(TAG, "onCreate")
         delegate.onCreate(this, savedInstanceState)
         super.onCreate(savedInstanceState)
     }
@@ -37,15 +41,16 @@ abstract class BindingDialogFragment : DialogFragment(), IComponent, DialogInter
     }
 
     override fun onDestroyView() {
+        Log.v(TAG, "onDestroyView")
         delegate.onDestroy(this)
         super.onDestroyView()
     }
 
-   /* override fun onDestroy() {
-        println("fragment onDestroy")
-        delegate.onDestroy(this)
-        super.onDestroy()
-    }*/
+    /* override fun onDestroy() {
+         println("fragment onDestroy")
+         delegate.onDestroy(this)
+         super.onDestroy()
+     }*/
 
     override fun onSaveInstanceState(outState: Bundle) {
         delegate.onSaveInstanceState(outState)
@@ -65,6 +70,7 @@ abstract class BindingDialogFragment : DialogFragment(), IComponent, DialogInter
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        Log.v(TAG, "onDestroyView")
         val b = getDialogBuilder()
 
         // setup buttons

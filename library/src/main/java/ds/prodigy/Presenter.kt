@@ -1,13 +1,23 @@
 package ds.prodigy
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
+import android.support.annotation.ColorRes
+import android.support.annotation.StringRes
+import android.support.v4.content.ContextCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import ds.prodigy.component.IComponent
 import rx.subjects.BehaviorSubject
 
 abstract class Presenter<C : IComponent> {
+
+    companion object {
+        var idGenerator: Long = 1
+            get() = field++
+    }
 
     var id = idGenerator
     open val navigator by lazy { Navigator(this) }
@@ -15,23 +25,33 @@ abstract class Presenter<C : IComponent> {
     var dead = false
     var justCreated = true
     val results = mutableListOf<Result<Any>>()
-    val lifecycleSignal = BehaviorSubject.create<LifecycleEvent>()
+    val lifecycleSignal: BehaviorSubject<LifecycleEvent> = BehaviorSubject.create()
+
+    lateinit internal var context: Context  // app context
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// public api
 
     inline fun <reified T : Any> Presenter<*>.setCallback(noinline cb: (T?) -> Unit) {
         val cls: Class<T> = T::class.java
         val result: Result<T> = Result(cls, cb)
-        //result.owner = this
         results.add(result as Result<Any>)
     }
 
-    protected inline fun <reified T : Any> setResult(result: T?) {
+    inline fun <reified T : Any> setResult(result: T?) {
         val r: Result<in T> = results.first { T::class.java == it.cls }
         r.result = result
     }
 
-    //val lifeCycleSignal: BehaviorSubject
-
     fun isAttached() = component != null
+
+    // todo remove?
+    fun toast(text: String?) {
+        Toast.makeText(component?.getContext(), text, Toast.LENGTH_SHORT).show()
+    }
+
+    fun getString(@StringRes id: Int) = context.getString(id)
+
+    fun getColor(@ColorRes id: Int) = ContextCompat.getColor(context, id)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // lifecycle and callbacks
@@ -59,33 +79,19 @@ abstract class Presenter<C : IComponent> {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // finish activity, back to fragment stack, close dialog etc.
-    fun finish() {
-        component?.delegate?.finish(component!!)
-    }
 
-    fun fireCallbacks() {
-        results.forEach {
-            //if (it.owner?.isAttached() ?: false) {
-            it.callback.invoke(it.result)
-            //it.owner = null
-            //}
-        }
-        results.clear()
-    }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     internal fun getActivity(): Activity? {
         return component?.getActivity()
     }
 
-    fun toast(text: String?) {
-        Toast.makeText(component?.getContext(), text, Toast.LENGTH_SHORT).show()
+    internal fun fireCallbacks() {
+        results.forEach {
+            it.callback.invoke(it.result)
+        }
+        results.clear()
     }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    companion object {
-        var idGenerator: Long = 1
-            get() = field++
-    }
 }

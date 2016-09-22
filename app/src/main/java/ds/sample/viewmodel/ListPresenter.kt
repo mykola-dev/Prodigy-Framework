@@ -2,8 +2,8 @@ package ds.sample.viewmodel
 
 import android.databinding.ObservableField
 import android.os.Bundle
-import ds.prodigy.IComponent
 import ds.prodigy.Presenter
+import ds.prodigy.component.IComponent
 import ds.sample.adapter.NamesAdapter
 import ds.sample.data.Name
 
@@ -22,11 +22,25 @@ class ListPresenter : Presenter<IComponent>() {
             Name("John", "Rambo"),
             Name("Luke", "Skywalker"),
             Name("Pikachu", "the Pokemon"),
+            Name("Sasha", "Grey"),
+            Name("Harry", "Potter"),
+            Name("Stepan", "Bandera"),
+            Name("Shao", "Tsung"),
+            Name("Eric", "Cartman"),
+            Name("Ivo", "Bobul"),
+            Name("Bruce", "Lee"),
             Name("Vasya", "Pupkin"),
             Name("Geralt", "of Rivia"),
             Name("John", "Rambo"),
             Name("Luke", "Skywalker"),
-            Name("Pikachu", "the Pokemon")
+            Name("Pikachu", "the Pokemon"),
+            Name("Sasha", "Grey"),
+            Name("Harry", "Potter"),
+            Name("Stepan", "Bandera"),
+            Name("Shao", "Tsung"),
+            Name("Eric", "Cartman"),
+            Name("Ivo", "Bobul"),
+            Name("Bruce", "Lee")
         )
     }
 

@@ -17,5 +17,4 @@ class NamesAdapter(ctx: Context, data: List<Name>) : ViewModelAdapter<NameViewMo
         viewModel.last = item.last
     }
 
-
 }

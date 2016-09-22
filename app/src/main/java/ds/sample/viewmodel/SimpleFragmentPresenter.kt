@@ -1,8 +1,8 @@
 package ds.sample.viewmodel
 
 import android.databinding.ObservableField
-import ds.prodigy.IComponent
 import ds.prodigy.Presenter
+import ds.prodigy.component.IComponent
 
 class SimpleFragmentPresenter(text: String? = null) : Presenter<IComponent>() {
     val text = ObservableField<String>()

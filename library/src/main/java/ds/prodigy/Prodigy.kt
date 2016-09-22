@@ -1,11 +1,11 @@
 package ds.prodigy
 
 import android.support.annotation.LayoutRes
+import ds.prodigy.component.IComponent
 
 // framework helper. shouldn't use it directly in most cases
 object Prodigy {
-
-    var prodigyLogEnabled = true
+    val TAG = "Prodigy"
 
     val configs = mutableListOf<Configuration>()
     internal val presentersCache = mutableMapOf<Long, Presenter<*>>()
@@ -26,23 +26,23 @@ object Prodigy {
 
     // when BindingAware exists. do not use it directly!
     internal fun provide(cCls: Class<out IComponent>, presenterId: Long = 0): Presenter<*> {
-        log("provide presenter for ${cCls.simpleName}")
+        L.i(TAG, "provide presenter for ${cCls.simpleName}")
         var p: Presenter<*>?
 
         if (presenterId != 0L) {
             p = peekDelayed(presenterId)
             if (p != null) {
-                log("found unbinded presenter!")
+                L.i(TAG, "found unbinded presenter!")
             } else if (presentersCache.containsKey(presenterId)) {
                 p = presentersCache[presenterId]
-                log("got from cache id=$presenterId")
+                L.i(TAG, "got from cache id=$presenterId")
             } else {
                 throw IllegalStateException("Presenter not found!")
             }
         } else {
             val config = getConfigByComponent(cCls)
             p = config.presenter.newInstance() as Presenter<*>
-            log("create new ${p.javaClass.simpleName} with default constructor")
+            L.i(TAG, "create new ${p.javaClass.simpleName} with default constructor")
             put(p)
         }
 
@@ -50,17 +50,17 @@ object Prodigy {
     }
 
     fun put(presenter: Presenter<*>) {
-        log("put presenter to ${presenter.id}")
+        L.i(TAG, "put(${presenter.id}, ${presenter.javaClass.simpleName})")
         presentersCache.put(presenter.id, presenter)
     }
 
     fun putDelayed(presenter: Presenter<*>) {
-        log("put presenter to the queue")
+        L.i(TAG, "putDelayed(${presenter.id}, ${presenter.javaClass.simpleName})")
         unbindedQueue.add(presenter)
     }
 
     internal fun peekDelayed(id: Long): Presenter<*>? {
-        log("lookup queued presenter")
+        L.i(TAG, "lookup queued id=$id")
         val p = unbindedQueue.firstOrNull { it.id == id }
         if (p != null) {
             unbindedQueue.remove(p)
@@ -75,7 +75,7 @@ object Prodigy {
 
     fun remove(p: Presenter<*>) {
         presentersCache.remove(p.id)
-        log("presenter ${p.id} has been removed from cache")
+        L.w(TAG, "remove(${p.id}, ${p.javaClass.simpleName})")
     }
 
     internal fun getConfigByComponent(cCls: Class<out IComponent>): Configuration = configs.single { it.component == cCls }

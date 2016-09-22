@@ -6,8 +6,13 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import ds.prodigy.component.BindingActivity
+import ds.prodigy.component.BindingDialogFragment
+import ds.prodigy.component.BindingFragment
+import ds.prodigy.component.IComponent
 
 open class Navigator(val presenter: Presenter<*>) {
+    val TAG = "navigator"
 
     var onDialogButton: ((Int) -> Unit)? = null
 
@@ -15,7 +20,7 @@ open class Navigator(val presenter: Presenter<*>) {
      * Run Activity
      */
     open protected fun startActivity(cls: Class<out BindingActivity>, bundle: Bundle? = null, flags: Int = 0) {
-        log("startActivity ${cls.name}")
+        L.v(TAG, "startActivity ${cls.name}")
         val a = presenter.getActivity()
         if (a != null) {
             val intent = Intent(a, cls).addFlags(flags)
@@ -27,7 +32,7 @@ open class Navigator(val presenter: Presenter<*>) {
     }
 
     open protected fun startDialog(cls: Class<out BindingDialogFragment>, bundle: Bundle? = null) {
-        log("startDialog ${cls.name}")
+        L.v(TAG, "startDialog ${cls.name}")
         val a = presenter.getActivity()
         if (a != null) {
             val dialogFragment = Fragment.instantiate(a, cls.name, bundle) as DialogFragment
@@ -41,7 +46,7 @@ open class Navigator(val presenter: Presenter<*>) {
     }
 
     open protected fun commitFragment(cls: Class<out BindingFragment>, bundle: Bundle?, addToBackstack: Boolean = false) {
-        log("commitFragment ${cls.name}")
+        L.v(TAG, "commitFragment ${cls.name}")
         val a = presenter.getActivity()
         if (a != null) {
             val fragment = Fragment.instantiate(a, cls.name, bundle) as BindingFragment
@@ -50,11 +55,11 @@ open class Navigator(val presenter: Presenter<*>) {
                     .supportFragmentManager
                     .beginTransaction()
                 if (addToBackstack)
-                    transaction.addToBackStack(null)
-                transaction
-                    .add(fragment.getTargetLayout(), fragment, "fragment")
-                    //.commitNow()  // todo migrate to v24
-                    .commit()
+                    transaction.addToBackStack(null).add(fragment.getTargetLayout(), fragment, "fragment")
+                else
+                    transaction.replace(fragment.getTargetLayout(), fragment, "fragment")
+
+                transaction.commit()    //.commitNow() todo migrate to v24
             } else {
                 throw IllegalStateException("fragment can start only on FragmentActivity")
             }
@@ -63,7 +68,7 @@ open class Navigator(val presenter: Presenter<*>) {
     }
 
     open fun runComponent(cls: Class<out IComponent>, bundle: Bundle? = null) {
-        log("goto ${cls.name} ${if (bundle != null) "with bundle" else ""}")
+        L.v(TAG, "goto ${cls.name} ${if (bundle != null) "with bundle" else ""}")
         if (Activity::class.java.isAssignableFrom(cls)) {
             startActivity(cls as Class<out BindingActivity>, bundle)
         } else if (BindingDialogFragment::class.java.isAssignableFrom(cls)) {
@@ -84,7 +89,7 @@ open class Navigator(val presenter: Presenter<*>) {
         val config = Prodigy.getConfig(p.javaClass)
 
         if (p.isAttached()) {
-            log("presenter ${p.javaClass.simpleName} already running. skip any actions")
+            L.e(TAG, "presenter ${p.javaClass.simpleName} already running. skip any actions")
             return false
         } else if (!Prodigy.isAwaiting(p)) {
             Prodigy.putDelayed(p)
@@ -99,7 +104,7 @@ open class Navigator(val presenter: Presenter<*>) {
         val config = Prodigy.getConfig(p.javaClass)
 
         if (p.isAttached()) {
-            log("presenter ${p.javaClass.simpleName} already running. skip any actions")
+            L.e(TAG, "presenter ${p.javaClass.simpleName} already running. skip any actions")
             return false
         } else if (!Prodigy.isAwaiting(p)) {
             Prodigy.putDelayed(p)
@@ -111,6 +116,23 @@ open class Navigator(val presenter: Presenter<*>) {
             throw IllegalStateException("Not a Fragment")
 
         return true
+    }
+
+    // finish activity, back to fragment stack, close dialog etc.
+    fun finish() {
+        with(presenter.component) {
+            when (this) {
+                is Activity -> finish()
+                is DialogFragment -> dismiss()
+                is Fragment -> {
+                    if (fragmentManager.backStackEntryCount > 0)
+                        fragmentManager.popBackStackImmediate()
+                    else
+                        activity.finish()
+                }
+                else -> throw IllegalStateException("finish not implemented properly")
+            }
+        }
     }
 
 }
