@@ -1,8 +1,6 @@
 .gradle
-gradle.properties
 local.properties
+gradle.properties
+build
 .idea
 *.iml
-build
-captures
-*.log
