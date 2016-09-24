@@ -10,6 +10,7 @@ import ds.prodigy.component.BindingActivity
 import ds.prodigy.component.BindingDialogFragment
 import ds.prodigy.component.BindingFragment
 import ds.prodigy.component.IComponent
+import ds.prodigy.tools.L
 
 open class Navigator(val presenter: Presenter<*>) {
     val TAG = "navigator"

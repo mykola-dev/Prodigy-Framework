@@ -2,6 +2,7 @@ package ds.prodigy
 
 import android.support.annotation.LayoutRes
 import ds.prodigy.component.IComponent
+import ds.prodigy.tools.L
 
 // framework helper. shouldn't use it directly in most cases
 object Prodigy {

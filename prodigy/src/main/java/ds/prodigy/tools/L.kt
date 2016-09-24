@@ -1,6 +1,7 @@
-package ds.prodigy
+package ds.prodigy.tools
 
 import android.util.Log
+import ds.prodigy.BuildConfig
 
 object L {
 

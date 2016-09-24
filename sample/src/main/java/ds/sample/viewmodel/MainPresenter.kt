@@ -2,7 +2,7 @@ package ds.sample.viewmodel
 
 import android.content.DialogInterface.BUTTON_NEGATIVE
 import android.content.DialogInterface.BUTTON_POSITIVE
-import android.databinding.ObservableField
+import android.databinding.Bindable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,24 +11,32 @@ import ds.prodigy.Config
 import ds.prodigy.Presenter
 import ds.prodigy.Prodigy
 import ds.prodigy.component.IComponent
+import ds.prodigy.tools.property
+import ds.prodigy.tools.respectLifeCycle
+import ds.sample.BR
 import ds.sample.R
 import ds.sample.util.L
 import ds.sample.view.MainActivity
 import ds.sample.view.TestActivity
+import rx.Observable
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 @Config(component = MainActivity::class, layout = R.layout.activity_main)
 class MainPresenter : Presenter<IComponent>() {
 
     // views
-    val textField = ObservableField<String>()
+    @get:Bindable var textField by property<String>(BR.textField)
 
     private var notificationsEnabled = true
 
     override fun onCreate(bundle: Bundle?) {
-        val date = SimpleDateFormat.getDateTimeInstance().format(Date())
-        textField.set(date)
+        Observable.interval(1, TimeUnit.SECONDS)
+            .respectLifeCycle(this)
+            .subscribe {
+                textField = SimpleDateFormat.getDateTimeInstance().format(Date())
+            }
     }
 
 
@@ -39,7 +47,7 @@ class MainPresenter : Presenter<IComponent>() {
 
     fun onScreen2ButtonClick() {
         L.v("clicked!")
-        val test2: TestPresenter2 = TestPresenter2("Marty McFly", textField.get())
+        val test2: TestPresenter2 = TestPresenter2("Marty McFly", textField!!)
         navigator.run(test2)
     }
 

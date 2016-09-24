@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
 import ds.prodigy.BinderDelegate
-import ds.prodigy.L
+import ds.prodigy.tools.L
 
 abstract class BindingFragment : Fragment(), IComponent {
     val TAG="F"

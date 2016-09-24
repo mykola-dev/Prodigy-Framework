@@ -2,6 +2,7 @@ package ds.prodigy
 
 import android.app.Activity
 import android.content.Context
+import android.databinding.BaseObservable
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.annotation.StringRes
@@ -10,10 +11,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import ds.prodigy.component.IComponent
+import ds.prodigy.tools.L
+import ds.prodigy.tools.LifecycleEvent
 import rx.subjects.BehaviorSubject
 import java.util.*
 
-abstract class Presenter<C : IComponent> {
+abstract class Presenter<C : IComponent> : BaseObservable() {
     val TAG = "P"
 
     companion object {

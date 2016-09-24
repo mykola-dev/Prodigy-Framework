@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import ds.prodigy.BinderDelegate
-import ds.prodigy.L
+import ds.prodigy.tools.L
 
 abstract class BindingActivity : AppCompatActivity(), IComponent {
     val TAG = "A"

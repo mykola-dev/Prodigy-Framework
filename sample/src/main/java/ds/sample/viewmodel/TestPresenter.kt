@@ -6,7 +6,7 @@ import android.view.MenuItem
 import ds.prodigy.Config
 import ds.prodigy.Presenter
 import ds.prodigy.component.IComponent
-import ds.prodigy.respectLifeCycle
+import ds.prodigy.tools.respectLifeCycle
 import ds.sample.R
 import ds.sample.util.L
 import ds.sample.util.applySchedulers

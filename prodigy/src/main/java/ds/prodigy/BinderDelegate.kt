@@ -11,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import ds.prodigy.component.IComponent
+import ds.prodigy.tools.L
+import ds.prodigy.tools.LifecycleEvent
 
 class BinderDelegate {
 
