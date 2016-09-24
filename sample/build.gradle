@@ -33,12 +33,6 @@ android {
     }
 }
 
-/*apt {
-    arguments {
-        eventBusIndex "com.matrixx.android.data.EventBusIndex"
-    }
-}*/
-
 kapt {
     generateStubs = true
 }

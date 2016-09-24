@@ -4,7 +4,7 @@ import android.util.Log
 
 object L {
 
-    var logEnabled = true
+    var logEnabled = BuildConfig.DEBUG
 
     fun v(tag: String, message: String) {
         if (logEnabled) Log.v(tag, message)

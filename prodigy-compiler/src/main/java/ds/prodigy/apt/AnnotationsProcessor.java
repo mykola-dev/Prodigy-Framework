@@ -47,7 +47,7 @@ public class AnnotationsProcessor extends AbstractProcessor {
                 for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : element.getAnnotationMirrors().get(0).getElementValues().entrySet()) {
                     String key = entry.getKey().getSimpleName().toString();
                     String value = entry.getValue().toString();
-                    logger.note("key=%s value=%s", key, value);
+                    //logger.note("key=%s value=%s", key, value);
                     if (key.equals("component"))
                         config.component = value;
                     else if (key.equals("layout"))
@@ -59,7 +59,7 @@ public class AnnotationsProcessor extends AbstractProcessor {
 
             generate(configs);
         } else {
-            logger.warn(null, ">>> annotations not found");
+            //logger.warn(null, ">>> annotations not found");
         }
 
         return true;

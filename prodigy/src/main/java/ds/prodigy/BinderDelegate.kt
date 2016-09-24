@@ -23,8 +23,6 @@ class BinderDelegate {
     lateinit var presenter: Presenter<IComponent>
     internal var binding: ViewDataBinding? = null
 
-    private var savedState = false  // for fragment only
-
     internal fun onCreate(component: IComponent, savedState: Bundle?) {
         L.d(TAG, "onCreate ${component.javaClass.simpleName}")
 
@@ -78,7 +76,6 @@ class BinderDelegate {
     }
 
     internal fun onDestroy(c: IComponent) {
-        //ensurePresenter() ?: return
         L.d(TAG, "onDestroy ${c.javaClass.simpleName} id=${presenter.id}")
         if (presenter.dead) {
             L.w(TAG, "already dead")
@@ -100,7 +97,7 @@ class BinderDelegate {
         } else if (c is DialogFragment) {
             finishing = c.isRemoving
         } else if (c is Fragment) {
-            L.d(TAG, "${c.javaClass.simpleName} isFinishing=${c.activity.isFinishing} isRemoving=${c.isRemoving} isDetached=${c.isDetached} stateSaved=$savedState")
+            L.d(TAG, "${c.javaClass.simpleName} isFinishing=${c.activity.isFinishing} isRemoving=${c.isRemoving} isDetached=${c.isDetached}")
             finishing = c.isRemoving || c.activity.isFinishing /*|| c.isDetached*/
         } else {
             throw IllegalStateException("doesnt support yet")
@@ -117,10 +114,8 @@ class BinderDelegate {
     }
 
     internal fun onSaveInstanceState(state: Bundle) {
-        //ensurePresenter() ?: return
         L.d(TAG, "onSaveInstanceState ${presenter.javaClass.simpleName} id=${presenter.id}")
         state.putLong(PRESENTER_ID, presenter.id)
-        savedState = true
     }
 
     internal fun onStart(component: IComponent) {

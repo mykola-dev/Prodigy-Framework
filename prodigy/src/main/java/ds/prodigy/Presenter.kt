@@ -50,7 +50,7 @@ abstract class Presenter<C : IComponent> {
 
     fun isAttached() = component != null
 
-    // todo remove?
+    @Deprecated("")
     fun toast(text: String?) {
         Toast.makeText(component?.getContext(), text, Toast.LENGTH_SHORT).show()
     }
@@ -82,9 +82,6 @@ abstract class Presenter<C : IComponent> {
     open fun onOptionsItemSelected(item: MenuItem): Boolean = false
 
     open fun onPrepareOptionsMenu(menu: Menu): Boolean = true
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

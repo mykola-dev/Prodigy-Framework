@@ -2,14 +2,12 @@ package ds.prodigy.apt;
 
 import com.squareup.javapoet.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static javax.lang.model.element.Modifier.*;
 
 final class CodeGenerator {
 
-    //private ClassName context = ClassName.get("android.content", "Context");
     private ClassName configurationClass = ClassName.get("ds.prodigy", "Configuration");
     List<Config> configs;
 
@@ -18,30 +16,11 @@ final class CodeGenerator {
     }
 
     TypeSpec generateClass() {
-        List<MethodSpec> methods = new ArrayList<>();
-
         return TypeSpec.classBuilder("GeneratedConfigs")
                        .addModifiers(PUBLIC, FINAL)
                        .addMethod(provideConfigs())
                        .build();
-                       //.addField(configsField())
-                       //.addStaticBlock(initConfigs())
-                       /*.addField(prefs, "prefs", PRIVATE)
-                       .addField(editor, "edit", PRIVATE)
-                       .addField(allKeysField())
-                       .addFields(keys.values())
-                       .addStaticBlock(allKeysInit())
-                       .addFields(converters.values())
-                       .addMethod(constructor())
-                       .addMethod(with())
-                       .addModifiers(PUBLIC, FINAL)
-                       .addMethods(methods)
-                       .addMethod(commit())
-                       .addMethod(getAll())
-                       .addMethod(clear())
-                       .addMethod(applyDefaults())
-                       .addMethod(getPrefs())
-                       .addMethod(getFileName())*/
+
     }
 
     private FieldSpec configsField() {
