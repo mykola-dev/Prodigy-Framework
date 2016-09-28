@@ -10,13 +10,13 @@ import android.view.View
 import ds.prodigy.Config
 import ds.prodigy.Presenter
 import ds.prodigy.Prodigy
-import ds.prodigy.component.IComponent
 import ds.prodigy.tools.property
 import ds.prodigy.tools.respectLifeCycle
 import ds.sample.BR
 import ds.sample.R
 import ds.sample.util.L
 import ds.sample.view.MainActivity
+import ds.sample.view.MenuComponent
 import ds.sample.view.TestActivity
 import rx.Observable
 import java.text.SimpleDateFormat
@@ -24,7 +24,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Config(component = MainActivity::class, layout = R.layout.activity_main)
-class MainPresenter : Presenter<IComponent>() {
+class MainPresenter : Presenter<MenuComponent>() {
 
     // views
     @get:Bindable var textField by property<String>(BR.textField)
@@ -41,20 +41,17 @@ class MainPresenter : Presenter<IComponent>() {
 
 
     fun onScreen1ButtonClick(v: View) {
-        L.v("clicked!")
         navigator.runComponent(TestActivity::class.java)
     }
 
     fun onScreen2ButtonClick() {
-        L.v("clicked!")
         val test2: TestPresenter2 = TestPresenter2("Marty McFly", textField!!)
         navigator.run(test2)
     }
 
     fun onScreen3ButtonClick() {
-        L.v("clicked!")
         val p = CallbackPresenter()
-        p.setCallback<String> {
+        p.setCallback<String>(this) {
             L.v("callback!")
             toast(it)
         }
@@ -63,7 +60,7 @@ class MainPresenter : Presenter<IComponent>() {
 
     fun onInputButtonClick() {
         val p = DialogPresenter()
-        p.setCallback<Int> {
+        p.setCallback<Int>(this) {
             L.v("callbacked!")
             when (it) {
                 BUTTON_POSITIVE -> toast("ok pressed")
@@ -88,9 +85,7 @@ class MainPresenter : Presenter<IComponent>() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        // todo get rid of view stuff in the presenter
-        menu.findItem(R.id.menu_notifications)
-            .setIcon(if (notificationsEnabled) R.drawable.ic_notifications else R.drawable.ic_notifications_off)
+        component?.toggleNotificationsIcon(menu, notificationsEnabled)
         return true
     }
 

@@ -19,7 +19,7 @@ class ButtonFragmentPresenter(val index: Int = 1) : Presenter<IComponent>() {
 
     fun onNextButton() {
         val presenter = ButtonFragmentPresenter(index + 1)
-        presenter.setCallback<String> { toast(it) }
+        presenter.setCallback<String>(this) { toast(it) }
         navigator.run(presenter, addToBackstack = true)
     }
 

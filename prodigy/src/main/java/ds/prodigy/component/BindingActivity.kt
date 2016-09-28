@@ -32,19 +32,19 @@ abstract class BindingActivity : AppCompatActivity(), IComponent {
     }
 
     override fun onPause() {
-        super.onPause()
         delegate.onPause(this)
+        super.onPause()
     }
 
     override fun onStop() {
-        super.onStop()
         delegate.onStop(this)
+        super.onStop()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         L.v(TAG, "onDestroy")
         delegate.onDestroy(this)
+        super.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

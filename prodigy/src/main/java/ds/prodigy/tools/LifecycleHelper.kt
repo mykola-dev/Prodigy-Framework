@@ -1,6 +1,5 @@
 package ds.prodigy.tools
 
-import ds.prodigy.tools.L
 import ds.prodigy.Presenter
 import rx.Observable
 
@@ -16,7 +15,7 @@ fun <T> Observable<T>.respectLifeCycle(p: Presenter<*>): Observable<T> {
 internal fun <T> getSignal(lifecycleSignal: Observable<T>, event: T): Observable<T> {
     return lifecycleSignal
         .takeFirst { e -> e == event }
-        .doOnNext { L.w("lifecycle", "signalled $event") }
+        //.doOnNext { L.w("lifecycle", "signalled $event") }
 }
 
 enum class LifecycleEvent {

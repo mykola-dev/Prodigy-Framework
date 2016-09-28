@@ -12,6 +12,7 @@ interface IComponent {
 
     // helpers
     fun invalidateOptionsMenu()
+
     fun getContext(): Context
     fun getActivity(): Activity
 

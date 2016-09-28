@@ -1,11 +1,10 @@
 package ds.prodigy.tools
 
 import android.util.Log
-import ds.prodigy.BuildConfig
 
 object L {
 
-    var logEnabled = BuildConfig.DEBUG
+    var logEnabled = true
 
     fun v(tag: String, message: String) {
         if (logEnabled) Log.v(tag, message)

@@ -95,6 +95,7 @@ class BinderDelegate {
 
         val finishing: Boolean
         if (c is Activity) {
+            L.d(TAG, "${c.javaClass.simpleName} isFinishing=${c.isFinishing}")
             finishing = c.isFinishing
         } else if (c is DialogFragment) {
             finishing = c.isRemoving

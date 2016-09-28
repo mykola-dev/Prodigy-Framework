@@ -36,15 +36,15 @@ abstract class Presenter<C : IComponent> : BaseObservable() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // public api
 
-    inline fun <reified T : Any> Presenter<*>.setCallback(noinline cb: (T?) -> Unit) {
+    inline fun <reified T : Any> setCallback(owner:Presenter<*>,noinline cb: (T?) -> Unit) {
         val cls: Class<T> = T::class.java
-        val result: Result<T> = Result(cls, cb)
+        val result: Result<T> = Result(owner, cls, cb)
         results.add(result as Result<Any>)
     }
 
     inline fun <reified T : Any> setResult(result: T?) {
         try {
-            val r: Result<in T> = results.first { T::class.java == it.cls }
+            val r: Result<in T> = results.first { T::class.java == it.resultType }
             r.result = result
         } catch (e: NoSuchElementException) {
             L.e(TAG, "Can't set result for null callback")
@@ -94,7 +94,12 @@ abstract class Presenter<C : IComponent> : BaseObservable() {
 
     internal fun fireCallbacks() {
         results.forEach {
-            it.callback.invoke(it.result)
+            L.d(TAG, "callback to ${it.owner.javaClass.simpleName} id=${it.owner.id} activity=${it.owner.getActivity()} result=${it.result}")
+            if (!it.owner.dead /*&& it.owner.getActivity() != null*/) {
+                it.callback.invoke(it.result)
+            } else {
+                L.w(TAG, "callback owner or its activity is dead")
+            }
         }
         results.clear()
     }
